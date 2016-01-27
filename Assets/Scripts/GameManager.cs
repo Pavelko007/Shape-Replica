@@ -63,7 +63,6 @@ namespace RecognizeGesture
 
             if (GUI.Button(new Rect(Screen.width - 100, 10, 100, 30), "Recognize"))
             {
-
                 recognized = true;
 
                 Gesture candidate = new Gesture(points.ToArray());
@@ -132,6 +131,7 @@ namespace RecognizeGesture
         {
             Vector3 lineRendererPoint = Camera.main.ScreenToWorldPoint(new Vector3(TouchPosition.x, TouchPosition.y, 10));
             curLineRendererPoints.Add(lineRendererPoint);
+            currentGestureLineRenderer.SetVertexCount(curLineRendererPoints.Count);
             currentGestureLineRenderer.SetPositions(curLineRendererPoints.ToArray());
         }
 
