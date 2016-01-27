@@ -30,6 +30,7 @@ namespace RecognizeGesture
         private bool recognized;
         private string newGestureName = "";
         private List<Vector3> curLineRendererPoints = new List<Vector3>();
+        public double RecognitionThreshold;
 
         void Start()
         {
@@ -56,28 +57,28 @@ namespace RecognizeGesture
 
         void OnGUI()
         {
-
+            CalcDrawArea();
             GUI.Box(drawArea, "Draw Area");
+            DrawMessage();
+            ProcessRecognize();
+            ProcessAddNewGesture();
+        }
 
-            GUI.Label(new Rect(10, Screen.height - 40, 500, 50), message);
+        private void ProcessRecognize()
+        {
+            var recognizeButtonRect = new Rect(Screen.width - 100, 10, 100, 30);
+            if (GUI.Button(recognizeButtonRect, "Recognize")) TryRecognizeGesture();
+        }
 
-            if (GUI.Button(new Rect(Screen.width - 100, 10, 100, 30), "Recognize"))
-            {
-                recognized = true;
-
-                Gesture candidate = new Gesture(points.ToArray());
-                Result gestureResult = PointCloudRecognizer.Classify(candidate, trainingSet.ToArray());
-
-                message = gestureResult.GestureClass + " " + gestureResult.Score;
-            }
-
+        private void ProcessAddNewGesture()
+        {
             GUI.Label(new Rect(Screen.width - 200, 150, 70, 30), "Add as: ");
             newGestureName = GUI.TextField(new Rect(Screen.width - 150, 150, 100, 30), newGestureName);
 
             if (GUI.Button(new Rect(Screen.width - 50, 150, 50, 30), "Add") && points.Count > 0 && newGestureName != "")
             {
-
-                string fileName = String.Format("{0}/{1}-{2}.xml", Application.persistentDataPath, newGestureName, DateTime.Now.ToFileTime());
+                string fileName = String.Format("{0}/{1}-{2}.xml", Application.persistentDataPath, newGestureName,
+                    DateTime.Now.ToFileTime());
 
 #if !UNITY_WEBPLAYER
                 GestureIO.WriteGesture(points.ToArray(), newGestureName, fileName);
@@ -87,6 +88,25 @@ namespace RecognizeGesture
 
                 newGestureName = "";
             }
+        }
+
+        private void TryRecognizeGesture()
+        {
+            Gesture candidate = new Gesture(points.ToArray());
+            Result gestureResult = PointCloudRecognizer.Classify(candidate, trainingSet.ToArray());
+            recognized = true;
+
+            Debug.Log(string.Format("recognition score :{0}", gestureResult.Score));
+            
+            message = gestureResult.Score < RecognitionThreshold
+                ? "Gesture doesn't match. Try again"
+                : gestureResult.GestureClass + " " + gestureResult.Score;
+        }
+
+        private void DrawMessage()
+        {
+            var messageRect = new Rect(10, Screen.height - 40, 500, 50);
+            GUI.Label(messageRect, message);
         }
 
         private void LoadGestures()

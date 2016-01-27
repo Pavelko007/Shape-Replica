@@ -200,6 +200,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gestureOnScreenPrefab: {fileID: 400000, guid: 971129baafd304455a111daa5207b8a1,
     type: 2}
+  RecognitionThreshold: 0.8
 --- !u!4 &415255062
 Transform:
   m_ObjectHideFlags: 0
