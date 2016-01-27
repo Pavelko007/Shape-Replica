@@ -21,15 +21,15 @@ namespace RecognizeGesture
         private Rect drawArea;
 
         private RuntimePlatform platform;
-        private int vertexCount = 0;
 
         private List<LineRenderer> gestureLinesRenderer = new List<LineRenderer>();
-        private LineRenderer currentGestureLineRenderer;
+        private LineRenderer currentGestureLineRenderer = null;
 
         //GUI
         private string message;
         private bool recognized;
         private string newGestureName = "";
+        private List<Vector3> curLineRendererPoints = new List<Vector3>();
 
         void Start()
         {
@@ -130,21 +130,23 @@ namespace RecognizeGesture
 
         private void AddLineRendererPoint()
         {
-            currentGestureLineRenderer.SetVertexCount(++vertexCount);
-            Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(TouchPosition.x, TouchPosition.y, 10));
-            currentGestureLineRenderer.SetPosition(vertexCount - 1, worldPoint);
+            Vector3 lineRendererPoint = Camera.main.ScreenToWorldPoint(new Vector3(TouchPosition.x, TouchPosition.y, 10));
+            curLineRendererPoints.Add(lineRendererPoint);
+            currentGestureLineRenderer.SetPositions(curLineRendererPoints.ToArray());
         }
 
         private void AddNewStroke()
         {
+            if (currentGestureLineRenderer != null)
+            {
+                curLineRendererPoints.Clear();
+            }
             ++strokeId;
 
             Transform tmpGesture = Instantiate(gestureOnScreenPrefab, transform.position, transform.rotation) as Transform;
             currentGestureLineRenderer = tmpGesture.GetComponent<LineRenderer>();
 
             gestureLinesRenderer.Add(currentGestureLineRenderer);
-
-            vertexCount = 0;
         }
 
         private void CleanDrawingArea()
