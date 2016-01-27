@@ -7,14 +7,12 @@ using PDollarGestureRecognizer;
 
 namespace RecognizeGesture
 {
-    public class GameManager : MonoBehaviour
+    public class RecognitionBoard : DrawingBoard
     {
-
         public Transform gestureOnScreenPrefab;
 
         private List<Gesture> trainingSet = new List<Gesture>();
 
-        private List<Point> points = new List<Point>();
         private int strokeId = -1;
 
         private Vector2 TouchPosition = Vector2.zero;
