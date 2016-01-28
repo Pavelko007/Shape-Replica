@@ -16,20 +16,35 @@ namespace RecognizeGesture
 
         protected void ProcessAddNewGesture()
         {
-            GUI.Label(new Rect(Screen.width - 200, 150, 70, 30), "Add as: ");
-            newGestureName = GUI.TextField(new Rect(Screen.width - 150, 150, 100, 30), newGestureName);
+            var gestureNameLabelRect = new Rect(Screen.width - 200, 150, 70, 30);
+            GUI.Label(gestureNameLabelRect, "Add as: ");
 
-            if (GUI.Button(new Rect(Screen.width - 50, 150, 50, 30), "Add") && points.Count > 0 && newGestureName != "")
+            var gestureNameTextFieldRect = new Rect(Screen.width - 150, 150, 100, 30);
+            newGestureName = GUI.TextField(gestureNameTextFieldRect, newGestureName);
+
+            var addGestureRect = new Rect(Screen.width - 50, 150, 50, 30);
+
+            if (GUI.Button(addGestureRect, "Add") &&
+                points.Count > 0 &&
+                newGestureName != "")
             {
-                gestureAdded = true;
-                string fileName = String.Format("{0}/{1}-{2}.xml", Application.persistentDataPath, newGestureName,
-                    DateTime.Now.ToFileTime());
+                AddNewGesture();
+            }
+        }
+
+        private void AddNewGesture()
+        {
+            gestureAdded = true;
+
+            string fileName = string.Format("{0}/{1}-{2}.xml",
+                Application.persistentDataPath,
+                newGestureName,
+                DateTime.Now.ToFileTime());
 
 #if !UNITY_WEBPLAYER
-                GestureIO.WriteGesture(points.ToArray(), newGestureName, fileName);
+            GestureIO.WriteGesture(points.ToArray(), newGestureName, fileName);
 #endif
-                newGestureName = "";
-            }
+            newGestureName = "";
         }
 
         void OnGUI()
