@@ -1,11 +1,9 @@
 ﻿using UnityEngine;
 using System.Linq;
 using PDollarGestureRecognizer;
-using System;
 
 public class GestureRenderer : MonoBehaviour
 {
-    public Gesture Gesture;
     public Transform gestureOnScreenPrefab;
     private LineRenderer currentGestureLineRenderer;
 
@@ -13,11 +11,17 @@ public class GestureRenderer : MonoBehaviour
     void Start()
     {
         TextAsset textAsset = Resources.Load<TextAsset>("GestureSet/10-stylus-MEDIUM/10-stylus-medium-T-01");
-        Gesture = GestureIO.ReadGestureFromXML(textAsset.text);
-        Transform tmpGesture = Instantiate(gestureOnScreenPrefab, transform.position, transform.rotation) as Transform;
-        currentGestureLineRenderer = tmpGesture.GetComponent<LineRenderer>();
+        RenderGesture(GestureIO.ReadGestureFromXML(textAsset.text));
+    }
 
-        var rendererPoints = Gesture.Points
+    public void RenderGesture(Gesture nextGesture)
+    {
+        if(currentGestureLineRenderer != null) Destroy(currentGestureLineRenderer.gameObject);
+
+        currentGestureLineRenderer = (Instantiate(gestureOnScreenPrefab, transform.position, transform.rotation) as Transform)
+            .GetComponent<LineRenderer>();
+
+        var rendererPoints = nextGesture.Points
             .Select(gesturePoint => new Vector3(gesturePoint.X, -gesturePoint.Y, 10))
             .ToArray();
 
@@ -32,6 +36,7 @@ public class GestureRenderer : MonoBehaviour
         currentGestureLineRenderer.useWorldSpace = false;
         Transform LRTransform = currentGestureLineRenderer.gameObject.transform;
         LRTransform.localScale *= 3;
-        LRTransform.Translate(new Vector3(5, 0, 0));
+        var screenPoint = new Vector2(Screen.width * 4 / 5f, Screen.height * 1 / 2f);
+        LRTransform.Translate(Camera.main.ScreenToWorldPoint(screenPoint));
     }
 }

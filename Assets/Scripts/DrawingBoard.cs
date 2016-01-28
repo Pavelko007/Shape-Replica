@@ -19,7 +19,6 @@ namespace RecognizeGesture
         private List<LineRenderer> gestureLinesRenderer = new List<LineRenderer>();
         protected LineRenderer currentGestureLineRenderer = null;
 
-        protected bool recognized;
         protected List<Vector3> curLineRendererPoints = new List<Vector3>();
         public double RecognitionThreshold;
 
@@ -89,12 +88,12 @@ namespace RecognizeGesture
             gestureLinesRenderer.Add(currentGestureLineRenderer);
         }
 
-        private void CleanDrawingArea()
+        protected void CleanDrawingArea()
         {
-            recognized = false;
             strokeId = -1;
 
             points.Clear();
+            curLineRendererPoints.Clear();
 
             foreach (LineRenderer lineRenderer in gestureLinesRenderer)
             {

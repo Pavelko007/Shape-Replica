@@ -10,11 +10,32 @@ namespace RecognizeGesture
     {
         private string message;
         protected List<Gesture> Gestures = new List<Gesture>();
+        private GestureRenderer gestureRenderer;
+        private Gesture curGesture;
+        private RecognitionStatus recognitionStatus;
+
+        enum RecognitionStatus
+        {
+            Await,
+            Recognized,
+            Fail
+        }
 
         void Start()
         {
             Init();
             LoadGestures();
+
+            gestureRenderer = GetComponent<GestureRenderer>();
+            NextGesture();
+        }
+
+        private void NextGesture()
+        {
+            curGesture = Gestures[Random.Range(0, Gestures.Count)];
+            recognitionStatus = RecognitionStatus.Await;
+            gestureRenderer.RenderGesture(curGesture);
+            CleanDrawingArea();
         }
 
         void OnGUI()
@@ -33,14 +54,22 @@ namespace RecognizeGesture
         private void TryRecognizeGesture()
         {
             Gesture candidate = new Gesture(points.ToArray());
-            Result gestureResult = PointCloudRecognizer.Classify(candidate, Gestures.ToArray());
-            recognized = true;
+            Result gestureResult = PointCloudRecognizer.Classify(candidate, new []{curGesture});
 
             Debug.Log(string.Format("recognition score :{0}", gestureResult.Score));
-            
-            message = gestureResult.Score < RecognitionThreshold
-                ? "Gesture doesn't match. Try again"
-                : gestureResult.GestureClass + " " + gestureResult.Score;
+
+            if (gestureResult.Score < RecognitionThreshold)
+            {
+                recognitionStatus = RecognitionStatus.Fail;
+                message = "Gesture doesn't match. Try again";
+                CleanDrawingArea();
+            }
+            else
+            {
+                recognitionStatus = RecognitionStatus.Recognized;
+                message = gestureResult.GestureClass + " " + gestureResult.Score;
+                NextGesture();
+            }
         }
 
         private void DrawMessage()
@@ -75,7 +104,8 @@ namespace RecognizeGesture
 
         protected override bool ShouldCleanBoard()
         {
-            return recognized;
+            return RecognitionStatus.Recognized == recognitionStatus ||
+                RecognitionStatus.Fail == recognitionStatus;
         }
     }
 }
