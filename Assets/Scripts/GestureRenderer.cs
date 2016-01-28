@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Linq;
 using PDollarGestureRecognizer;
+using System;
 
 public class GestureRenderer : MonoBehaviour
 {
@@ -22,5 +23,15 @@ public class GestureRenderer : MonoBehaviour
 
         currentGestureLineRenderer.SetVertexCount(rendererPoints.Length);
         currentGestureLineRenderer.SetPositions(rendererPoints);
+
+        TransformGesture();
+    }
+
+    private void TransformGesture()
+    {
+        currentGestureLineRenderer.useWorldSpace = false;
+        Transform LRTransform = currentGestureLineRenderer.gameObject.transform;
+        LRTransform.localScale *= 3;
+        LRTransform.Translate(new Vector3(5, 0, 0));
     }
 }
