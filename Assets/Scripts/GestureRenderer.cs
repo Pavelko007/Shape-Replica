@@ -7,13 +7,6 @@ public class GestureRenderer : MonoBehaviour
     public Transform gestureOnScreenPrefab;
     private LineRenderer currentGestureLineRenderer;
 
-    // Use this for initialization
-    void Start()
-    {
-        TextAsset textAsset = Resources.Load<TextAsset>("GestureSet/10-stylus-MEDIUM/10-stylus-medium-T-01");
-        RenderGesture(GestureIO.ReadGestureFromXML(textAsset.text));
-    }
-
     public void RenderGesture(Gesture nextGesture)
     {
         if(currentGestureLineRenderer != null) Destroy(currentGestureLineRenderer.gameObject);

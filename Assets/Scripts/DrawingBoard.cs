@@ -30,8 +30,6 @@ namespace RecognizeGesture
 
             if (Input.GetMouseButtonDown(0))
             {
-                if (ShouldCleanBoard()) CleanDrawingArea();
-
                 AddNewStroke();
             }
 
