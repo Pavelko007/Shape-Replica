@@ -95,7 +95,7 @@ namespace RecognizeGesture
 
         private void LoadPreMadeGestures()
         {
-            TextAsset[] gesturesXml = Resources.LoadAll<TextAsset>("GestureSet/10-stylus-MEDIUM/");
+            TextAsset[] gesturesXml = Resources.LoadAll<TextAsset>("Gestures/");
             foreach (TextAsset gestureXml in gesturesXml)
             {
                 Gestures.Add(GestureIO.ReadGestureFromXML(gestureXml.text));
