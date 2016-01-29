@@ -20,6 +20,9 @@ public class GameManager : MonoBehaviour
         SetButtonVisibility(false);
         recognitionBoard = GetComponent<RecognitionBoard>();
         RecognitionBoard.GestureRecognized += OnGestureRecognized;
+
+        //fit slider in screen
+        RoundTimeIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(20, Screen.height * .9f);
     }
 
     private void SetButtonVisibility(bool isVisible)
@@ -62,7 +65,7 @@ public class GameManager : MonoBehaviour
         RoundTimeIndicator.maxValue = RoundLength;
         curRoundTimeLeft = RoundLength;
 
-        RoundLength *= 0.95f;
+        RoundLength *= .95f;
     }
 
     public void RestartGame()
