@@ -330,7 +330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a02cbe9eb378a34a879732f56ffb410, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RoundLength: 2
+  RoundLength: 10
   RoundTimeIndicator: {fileID: 1414454097}
 --- !u!1 &954402614
 GameObject:

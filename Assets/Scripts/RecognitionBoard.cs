@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
 
 using PDollarGestureRecognizer;
+using Random = UnityEngine.Random;
 
 namespace RecognizeGesture
 {
@@ -13,6 +15,8 @@ namespace RecognizeGesture
         private GestureRenderer gestureRenderer;
         private Gesture curGesture;
         private RecognitionStatus recognitionStatus;
+        
+        public static event Action GestureRecognized;
 
         enum RecognitionStatus
         {
@@ -21,16 +25,14 @@ namespace RecognizeGesture
             Fail
         }
 
-        void Start()
+        void Awake()
         {
+            gestureRenderer = GetComponent<GestureRenderer>();
             Init();
             LoadGestures();
-
-            gestureRenderer = GetComponent<GestureRenderer>();
-            NextGesture();
         }
-
-        private void NextGesture()
+        
+        public void NextGesture()
         {
             curGesture = Gestures[Random.Range(0, Gestures.Count)];
             recognitionStatus = RecognitionStatus.Await;
@@ -54,7 +56,7 @@ namespace RecognizeGesture
         private void TryRecognizeGesture()
         {
             Gesture candidate = new Gesture(points.ToArray());
-            Result gestureResult = PointCloudRecognizer.Classify(candidate, new []{curGesture});
+            Result gestureResult = PointCloudRecognizer.Classify(candidate, new[] { curGesture });
 
             Debug.Log(string.Format("recognition score :{0}", gestureResult.Score));
 
@@ -68,7 +70,7 @@ namespace RecognizeGesture
             {
                 recognitionStatus = RecognitionStatus.Recognized;
                 message = gestureResult.GestureClass + " " + gestureResult.Score;
-                NextGesture();
+                GestureRecognized();
             }
         }
 

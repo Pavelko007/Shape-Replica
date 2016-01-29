@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using RecognizeGesture;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -10,12 +11,19 @@ public class GameManager : MonoBehaviour
     
     public Slider RoundTimeIndicator;
 
+    private RecognitionBoard recognitionBoard;
+
+    void Awake()
+    {
+        recognitionBoard = GetComponent<RecognitionBoard>();
+        RecognitionBoard.GestureRecognized += OnGestureRecognized;
+    }
     // Use this for initialization
 	void Start ()
 	{
-	    curRoundTimeLeft = RoundLength;
-	    RoundTimeIndicator.maxValue = RoundLength;
-	}
+        ResetRound();
+        recognitionBoard.NextGesture();
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -30,4 +38,19 @@ public class GameManager : MonoBehaviour
 	        isPlaying = false;
 	    }
 	}
+
+    void OnGestureRecognized()
+    {
+        score++;
+        ResetRound();
+        recognitionBoard.NextGesture();
+    }
+
+    private void ResetRound()
+    {
+        RoundTimeIndicator.maxValue = RoundLength;
+        curRoundTimeLeft = RoundLength;
+
+        RoundLength *= 0.95f;
+    }
 }
