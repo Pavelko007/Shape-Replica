@@ -1,12 +1,19 @@
 using System.Collections.Generic;
 using PDollarGestureRecognizer;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace RecognizeGesture
 {
     public abstract class DrawingBoard : MonoBehaviour
     {
-        public Transform gestureOnScreenPrefab;
+        public bool IsLinesDisappear = false;
+
+        public Transform LineRenderPrefab;
+        public Transform TrailRendererPrefab;
+
+        private TrailRenderer curTrailRenderer;
+        private List<TrailRenderer> trailRenderers = new List<TrailRenderer>();
 
         protected List<Point> points = new List<Point>();
 
@@ -16,11 +23,12 @@ namespace RecognizeGesture
         protected Rect drawArea;
 
         protected RuntimePlatform platform;
-        private List<LineRenderer> gestureLinesRenderer = new List<LineRenderer>();
+        private List<LineRenderer> lineRenderers = new List<LineRenderer>();
         protected LineRenderer currentGestureLineRenderer = null;
 
         protected List<Vector3> curLineRendererPoints = new List<Vector3>();
         public double RecognitionThreshold;
+
 
         void Update()
         {
@@ -60,8 +68,14 @@ namespace RecognizeGesture
         {
             var point = new Point(TouchPosition.x, -TouchPosition.y, strokeId);
             points.Add(point);
-            
-            AddLineRendererPoint();
+
+            if (!IsLinesDisappear) AddLineRendererPoint();
+            else if (curTrailRenderer != null)
+            {
+                var mousePos = Camera.main.ScreenToWorldPoint(TouchPosition);
+                mousePos.z = 10;
+                curTrailRenderer.transform.position = mousePos;
+            }
         }
 
         private void AddLineRendererPoint()
@@ -80,10 +94,18 @@ namespace RecognizeGesture
             }
             ++strokeId;
 
-            Transform tmpGesture = Instantiate(gestureOnScreenPrefab, transform.position, transform.rotation) as Transform;
-            currentGestureLineRenderer = tmpGesture.GetComponent<LineRenderer>();
-
-            gestureLinesRenderer.Add(currentGestureLineRenderer);
+            if (IsLinesDisappear)
+            {
+                curTrailRenderer = (Instantiate(TrailRendererPrefab, Input.mousePosition, Quaternion.identity) as Transform).GetComponent<TrailRenderer>();
+                trailRenderers.Add(curTrailRenderer);
+            }
+            else
+            {
+                Transform tmpGesture =
+                    Instantiate(LineRenderPrefab, transform.position, transform.rotation) as Transform;
+                currentGestureLineRenderer = tmpGesture.GetComponent<LineRenderer>();
+                lineRenderers.Add(currentGestureLineRenderer);
+            }
         }
 
         protected void CleanDrawingArea()
@@ -93,13 +115,23 @@ namespace RecognizeGesture
             points.Clear();
             curLineRendererPoints.Clear();
 
-            foreach (LineRenderer lineRenderer in gestureLinesRenderer)
+            if (IsLinesDisappear)
             {
-                lineRenderer.SetVertexCount(0);
-                Destroy(lineRenderer.gameObject);
+                foreach (TrailRenderer trailRenderer in trailRenderers)
+                {
+                    Destroy(trailRenderer.gameObject);
+                }
+                trailRenderers.Clear();
             }
-
-            gestureLinesRenderer.Clear();
+            else
+            {
+                foreach (LineRenderer lineRenderer in lineRenderers)
+                {
+                    lineRenderer.SetVertexCount(0);
+                    Destroy(lineRenderer.gameObject);
+                }
+                lineRenderers.Clear();
+            }
         }
 
         protected void UpdateTouchPos()
