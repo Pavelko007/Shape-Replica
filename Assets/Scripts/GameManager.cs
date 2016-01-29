@@ -9,15 +9,24 @@ public class GameManager : MonoBehaviour
     private int score = 0;
     private bool isPlaying = true;
     
+    //UI
     public Slider RoundTimeIndicator;
+    public Button restartButton;
 
     private RecognitionBoard recognitionBoard;
 
     void Awake()
     {
+        SetButtonVisibility(false);
         recognitionBoard = GetComponent<RecognitionBoard>();
         RecognitionBoard.GestureRecognized += OnGestureRecognized;
     }
+
+    private void SetButtonVisibility(bool isVisible)
+    {
+        restartButton.gameObject.SetActive(isVisible);
+    }
+
     // Use this for initialization
 	void Start ()
 	{
@@ -36,6 +45,7 @@ public class GameManager : MonoBehaviour
 	    {
 	        Debug.Log(string.Format("Time elapsed, your score is {0} points", score));
 	        isPlaying = false;
+	        SetButtonVisibility(true);
 	    }
 	}
 
@@ -48,9 +58,18 @@ public class GameManager : MonoBehaviour
 
     private void ResetRound()
     {
+      
         RoundTimeIndicator.maxValue = RoundLength;
         curRoundTimeLeft = RoundLength;
 
         RoundLength *= 0.95f;
+    }
+
+    public void RestartGame()
+    {
+        SetButtonVisibility(false);
+        isPlaying = true;
+        ResetRound();
+        recognitionBoard.NextGesture();
     }
 }
