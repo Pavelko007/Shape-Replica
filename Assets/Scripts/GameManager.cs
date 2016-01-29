@@ -5,9 +5,10 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public float RoundLength = 10f;
+    private float curRoundLenth;
     private float curRoundTimeLeft;
-    private int score = 0;
-    private bool isPlaying = true;
+    private int score;
+    private bool isPlaying;
     
     //UI
     public Slider RoundTimeIndicator;
@@ -21,8 +22,14 @@ public class GameManager : MonoBehaviour
         recognitionBoard = GetComponent<RecognitionBoard>();
         RecognitionBoard.GestureRecognized += OnGestureRecognized;
 
-        //fit slider in screen
+        //fit slider into screen
         RoundTimeIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(20, Screen.height * .9f);
+    }
+
+    // Use this for initialization
+    void Start ()
+    {
+        RestartGame();
     }
 
     private void SetButtonVisibility(bool isVisible)
@@ -30,14 +37,7 @@ public class GameManager : MonoBehaviour
         restartButton.gameObject.SetActive(isVisible);
     }
 
-    // Use this for initialization
-	void Start ()
-	{
-        ResetRound();
-        recognitionBoard.NextGesture();
-    }
-	
-	// Update is called once per frame
+    // Update is called once per frame
 	void Update ()
 	{
 	    if (!isPlaying) return;
@@ -61,17 +61,18 @@ public class GameManager : MonoBehaviour
 
     private void ResetRound()
     {
-      
-        RoundTimeIndicator.maxValue = RoundLength;
-        curRoundTimeLeft = RoundLength;
+        RoundTimeIndicator.maxValue = curRoundLenth;
+        curRoundTimeLeft = curRoundLenth;
 
-        RoundLength *= .95f;
+        curRoundLenth *= .85f;
     }
 
     public void RestartGame()
     {
         SetButtonVisibility(false);
         isPlaying = true;
+        score = 0;
+        curRoundLenth = RoundLength;
         ResetRound();
         recognitionBoard.NextGesture();
     }
