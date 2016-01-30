@@ -14,5 +14,11 @@ namespace RecognizeGesture
             StrokePrefab = strokePrefab;
             return this;
         }
+
+        protected T CreateNewLine<T>() where T: Component
+        {
+            return (Instantiate(StrokePrefab, Input.mousePosition, Quaternion.identity) as Transform)
+                .GetComponent<T>();
+        }
     }
 }

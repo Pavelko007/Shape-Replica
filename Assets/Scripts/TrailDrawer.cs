@@ -10,8 +10,7 @@ namespace RecognizeGesture
 
         public override void BeginNewStroke()
         {
-            curTrailRenderer = (Instantiate(StrokePrefab, Input.mousePosition, Quaternion.identity) as Transform)
-                .GetComponent<TrailRenderer>();
+            curTrailRenderer = CreateNewLine<TrailRenderer>();
             trailRenderers.Add(curTrailRenderer);
         }
 
