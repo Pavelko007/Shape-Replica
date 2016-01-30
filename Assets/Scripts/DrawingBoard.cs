@@ -28,18 +28,14 @@ namespace RecognizeGesture
 
         protected virtual void Awake()
         {
-            if (IsLinesDisappear)
-            {
-                trailDrawer = gameObject.AddComponent(typeof (TrailDrawer)) as TrailDrawer;
-                trailDrawer.StrokePrefab = TrailRendererPrefab;
-                gestureDrawer = trailDrawer;
-            }
-            else
-            {
-                lineDrawer = gameObject.AddComponent(typeof(LineDrawer)) as LineDrawer;
-                lineDrawer.StrokePrefab = LineRenderPrefab;
-                gestureDrawer = lineDrawer;
-            }
+            gestureDrawer = IsLinesDisappear
+                ? AddDrawer<TrailDrawer>(TrailRendererPrefab)
+                : AddDrawer<LineDrawer>(LineRenderPrefab);
+        }
+
+        private GestureDrawerBase AddDrawer<T>(Transform strokePrefab) where T : GestureDrawerBase
+        {
+            return (gameObject.AddComponent(typeof(T)) as T).WithPrefab(strokePrefab);
         }
 
         void Update()

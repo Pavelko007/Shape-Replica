@@ -8,5 +8,11 @@ namespace RecognizeGesture
         public abstract void BeginNewStroke();
         public abstract void AddPoint(Vector2 touchPosition);
         public abstract void Clear();
+
+        public GestureDrawerBase WithPrefab(Transform strokePrefab)
+        {
+            StrokePrefab = strokePrefab;
+            return this;
+        }
     }
 }
