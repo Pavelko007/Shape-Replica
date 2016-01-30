@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RecognizeGesture
+namespace RecognizeGesture.GestureDrawer
 {
     class LineDrawer : GestureDrawerBase
     {

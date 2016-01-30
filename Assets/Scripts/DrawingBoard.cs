@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using PDollarGestureRecognizer;
+using RecognizeGesture.GestureDrawer;
 using UnityEngine;
 
 namespace RecognizeGesture
