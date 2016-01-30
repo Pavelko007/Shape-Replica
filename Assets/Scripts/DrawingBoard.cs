@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using PDollarGestureRecognizer;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace RecognizeGesture
 {
@@ -11,9 +10,6 @@ namespace RecognizeGesture
 
         public Transform LineRenderPrefab;
         public Transform TrailRendererPrefab;
-
-        private TrailRenderer curTrailRenderer;
-        private List<TrailRenderer> trailRenderers = new List<TrailRenderer>();
 
         protected List<Point> points = new List<Point>();
 
@@ -28,6 +24,12 @@ namespace RecognizeGesture
 
         protected List<Vector3> curLineRendererPoints = new List<Vector3>();
         public double RecognitionThreshold;
+        private readonly TrailDrawer trailDrawer = new TrailDrawer();
+
+        public TrailDrawer TrailDrawer
+        {
+            get { return trailDrawer; }
+        }
 
 
         void Update()
@@ -70,12 +72,7 @@ namespace RecognizeGesture
             points.Add(point);
 
             if (!IsLinesDisappear) AddLineRendererPoint();
-            else if (curTrailRenderer != null)
-            {
-                var mousePos = Camera.main.ScreenToWorldPoint(TouchPosition);
-                mousePos.z = 10;
-                curTrailRenderer.transform.position = mousePos;
-            }
+            else TrailDrawer.AddPoint(TouchPosition);
         }
 
         private void AddLineRendererPoint()
@@ -94,11 +91,7 @@ namespace RecognizeGesture
             }
             ++strokeId;
 
-            if (IsLinesDisappear)
-            {
-                curTrailRenderer = (Instantiate(TrailRendererPrefab, Input.mousePosition, Quaternion.identity) as Transform).GetComponent<TrailRenderer>();
-                trailRenderers.Add(curTrailRenderer);
-            }
+            if (IsLinesDisappear) TrailDrawer.BeginNewStroke(TrailRendererPrefab);
             else
             {
                 Transform tmpGesture =
@@ -115,14 +108,7 @@ namespace RecognizeGesture
             points.Clear();
             curLineRendererPoints.Clear();
 
-            if (IsLinesDisappear)
-            {
-                foreach (TrailRenderer trailRenderer in trailRenderers)
-                {
-                    Destroy(trailRenderer.gameObject);
-                }
-                trailRenderers.Clear();
-            }
+            if (IsLinesDisappear) TrailDrawer.Clear();
             else
             {
                 foreach (LineRenderer lineRenderer in lineRenderers)
