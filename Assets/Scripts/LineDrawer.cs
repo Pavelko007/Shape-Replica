@@ -22,34 +22,29 @@ namespace RecognizeGesture
         }
 
         protected List<Vector3> curLineRendererPoints = new List<Vector3>();
-
-        public List<Vector3> CurLineRendererPoints
-        {
-            set { curLineRendererPoints = value; }
-            get { return curLineRendererPoints; }
-        }
+        
 
         public override void BeginNewStroke()
         {
-            if (currentGestureLineRenderer != null) CurLineRendererPoints.Clear();
+            curLineRendererPoints.Clear();
 
-            Transform tmpGesture =
-                Instantiate(StrokePrefab, transform.position, transform.rotation) as Transform;
-            CurrentGestureLineRenderer = tmpGesture.GetComponent<LineRenderer>();
+            CurrentGestureLineRenderer = 
+                (Instantiate(StrokePrefab, transform.position, transform.rotation) as Transform)
+                .GetComponent<LineRenderer>();
             LineRenderers.Add(CurrentGestureLineRenderer);
         }
 
         public override void AddPoint(Vector2 touchPos)
         {
             Vector3 lineRendererPoint = Camera.main.ScreenToWorldPoint(new Vector3(touchPos.x, touchPos.y, 10));
-            CurLineRendererPoints.Add(lineRendererPoint);
-            CurrentGestureLineRenderer.SetVertexCount(CurLineRendererPoints.Count);
-            CurrentGestureLineRenderer.SetPositions(CurLineRendererPoints.ToArray());
+            curLineRendererPoints.Add(lineRendererPoint);
+            CurrentGestureLineRenderer.SetVertexCount(curLineRendererPoints.Count);
+            CurrentGestureLineRenderer.SetPositions(curLineRendererPoints.ToArray());
         }
 
         public override void Clear()
         {
-            CurLineRendererPoints.Clear();
+            curLineRendererPoints.Clear();
             foreach (LineRenderer lineRenderer in LineRenderers)
             {
                 lineRenderer.SetVertexCount(0);
