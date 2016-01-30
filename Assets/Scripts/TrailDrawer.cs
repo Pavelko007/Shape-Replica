@@ -8,14 +8,14 @@ namespace RecognizeGesture
         public TrailRenderer curTrailRenderer;
         public List<TrailRenderer> trailRenderers = new List<TrailRenderer>();
 
-        public override void BeginNewStroke(Transform trailRendererPrefab)
+        public override void BeginNewStroke()
         {
-            curTrailRenderer = (Instantiate(trailRendererPrefab, Input.mousePosition, Quaternion.identity) as Transform)
-                    .GetComponent<TrailRenderer>();
+            curTrailRenderer = (Instantiate(StrokePrefab, Input.mousePosition, Quaternion.identity) as Transform)
+                .GetComponent<TrailRenderer>();
             trailRenderers.Add(curTrailRenderer);
         }
 
-        public void AddPoint(Vector2 touchPosition)
+        public override void AddPoint(Vector2 touchPosition)
         {
             if (curTrailRenderer != null)
             {
@@ -25,7 +25,7 @@ namespace RecognizeGesture
             }
         }
 
-        public void Clear()
+        public override void Clear()
         {
             foreach (TrailRenderer trailRenderer in trailRenderers)
             {

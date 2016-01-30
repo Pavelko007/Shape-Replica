@@ -19,18 +19,28 @@ namespace RecognizeGesture
         protected Rect drawArea;
 
         protected RuntimePlatform platform;
-        private List<LineRenderer> lineRenderers = new List<LineRenderer>();
-        protected LineRenderer currentGestureLineRenderer = null;
 
-        protected List<Vector3> curLineRendererPoints = new List<Vector3>();
         public double RecognitionThreshold;
-        private readonly TrailDrawer trailDrawer = new TrailDrawer();
 
-        public TrailDrawer TrailDrawer
+        private TrailDrawer trailDrawer;
+        private LineDrawer lineDrawer;
+        private GestureDrawerBase gestureDrawer;
+
+        protected virtual void Awake()
         {
-            get { return trailDrawer; }
+            if (IsLinesDisappear)
+            {
+                trailDrawer = gameObject.AddComponent(typeof (TrailDrawer)) as TrailDrawer;
+                trailDrawer.StrokePrefab = TrailRendererPrefab;
+                gestureDrawer = trailDrawer;
+            }
+            else
+            {
+                lineDrawer = gameObject.AddComponent(typeof(LineDrawer)) as LineDrawer;
+                lineDrawer.StrokePrefab = LineRenderPrefab;
+                gestureDrawer = lineDrawer;
+            }
         }
-
 
         void Update()
         {
@@ -38,10 +48,7 @@ namespace RecognizeGesture
 
             if (!drawArea.Contains(TouchPosition)) return;
 
-            if (Input.GetMouseButtonDown(0))
-            {
-                AddNewStroke();
-            }
+            if (Input.GetMouseButtonDown(0)) AddNewStroke();
 
             if (Input.GetMouseButton(0)) AddGesturePoint();
         }
@@ -71,34 +78,13 @@ namespace RecognizeGesture
             var point = new Point(TouchPosition.x, -TouchPosition.y, strokeId);
             points.Add(point);
 
-            if (!IsLinesDisappear) AddLineRendererPoint();
-            else TrailDrawer.AddPoint(TouchPosition);
-        }
-
-        private void AddLineRendererPoint()
-        {
-            Vector3 lineRendererPoint = Camera.main.ScreenToWorldPoint(new Vector3(TouchPosition.x, TouchPosition.y, 10));
-            curLineRendererPoints.Add(lineRendererPoint);
-            currentGestureLineRenderer.SetVertexCount(curLineRendererPoints.Count);
-            currentGestureLineRenderer.SetPositions(curLineRendererPoints.ToArray());
+            gestureDrawer.AddPoint(TouchPosition);
         }
 
         private void AddNewStroke()
         {
-            if (currentGestureLineRenderer != null)
-            {
-                curLineRendererPoints.Clear();
-            }
             ++strokeId;
-
-            if (IsLinesDisappear) TrailDrawer.BeginNewStroke(TrailRendererPrefab);
-            else
-            {
-                Transform tmpGesture =
-                    Instantiate(LineRenderPrefab, transform.position, transform.rotation) as Transform;
-                currentGestureLineRenderer = tmpGesture.GetComponent<LineRenderer>();
-                lineRenderers.Add(currentGestureLineRenderer);
-            }
+            gestureDrawer.BeginNewStroke();
         }
 
         protected void CleanDrawingArea()
@@ -106,18 +92,8 @@ namespace RecognizeGesture
             strokeId = -1;
 
             points.Clear();
-            curLineRendererPoints.Clear();
 
-            if (IsLinesDisappear) TrailDrawer.Clear();
-            else
-            {
-                foreach (LineRenderer lineRenderer in lineRenderers)
-                {
-                    lineRenderer.SetVertexCount(0);
-                    Destroy(lineRenderer.gameObject);
-                }
-                lineRenderers.Clear();
-            }
+            gestureDrawer.Clear();
         }
 
         protected void UpdateTouchPos()

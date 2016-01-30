@@ -4,6 +4,9 @@ namespace RecognizeGesture
 {
     public abstract class GestureDrawerBase : MonoBehaviour
     {
-        public abstract void BeginNewStroke(Transform trailRendererPrefab);
+        public Transform StrokePrefab;
+        public abstract void BeginNewStroke();
+        public abstract void AddPoint(Vector2 touchPosition);
+        public abstract void Clear();
     }
 }

@@ -25,8 +25,9 @@ namespace RecognizeGesture
             Fail
         }
 
-        void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             gestureRenderer = GetComponent<GestureRenderer>();
             Init();
             LoadGestures();
