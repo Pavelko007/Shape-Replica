@@ -112,8 +112,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 391a195aeb513644abb735818fd83a47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gestureOnScreenPrefab: {fileID: 400000, guid: 971129baafd304455a111daa5207b8a1,
-    type: 2}
+  IsLinesDisappear: 0
+  LineRenderPrefab: {fileID: 400000, guid: 971129baafd304455a111daa5207b8a1, type: 2}
+  TrailRendererPrefab: {fileID: 0}
   RecognitionThreshold: 0
 --- !u!4 &600989347
 Transform:
