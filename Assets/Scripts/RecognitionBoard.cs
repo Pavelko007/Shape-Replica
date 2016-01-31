@@ -51,16 +51,10 @@ namespace RecognizeGesture
         {
             base.OnGUI();
             DrawMessage();
-            ProcessRecognize();
         }
 
-        private void ProcessRecognize()
-        {
-            var recognizeButtonRect = new Rect(Screen.width - 100, 10, 100, 30);
-            if (GUI.Button(recognizeButtonRect, "Recognize")) TryRecognizeGesture();
-        }
 
-        private void TryRecognizeGesture()
+        public void OnRecognizeClick()
         {
             Gesture candidate = new Gesture(points.ToArray());
             Result gestureResult = PointCloudRecognizer.Classify(candidate, new[] { curGesture });
