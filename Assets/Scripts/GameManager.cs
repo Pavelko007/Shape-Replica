@@ -21,9 +21,6 @@ public class GameManager : MonoBehaviour
         SetButtonVisibility(false);
         recognitionBoard = GetComponent<RecognitionBoard>();
         RecognitionBoard.GestureRecognized += OnGestureRecognized;
-
-        //fit slider into screen
-        RoundTimeIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(20, Screen.height * .9f);
     }
 
     // Use this for initialization
