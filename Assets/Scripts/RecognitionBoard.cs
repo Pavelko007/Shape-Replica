@@ -35,7 +35,13 @@ namespace RecognizeGesture
         
         public void NextGesture()
         {
-            curGesture = Gestures[Random.Range(0, Gestures.Count)];
+            if (Gestures.Count <= 1) Debug.LogError("not enough gestures in library");
+
+            Gesture newGesture;
+            do newGesture = Gestures[Random.Range(0, Gestures.Count)];
+            while (curGesture == newGesture);
+
+            curGesture = newGesture;
             recognitionStatus = RecognitionStatus.Await;
             gestureRenderer.RenderGesture(curGesture);
             CleanDrawingArea();
