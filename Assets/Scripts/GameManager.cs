@@ -4,17 +4,24 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public float RoundLength = 10f;
+    [SerializeField]
+    private float RoundLength = 10f;
     private float curRoundLenth;
     private float curRoundTimeLeft;
+
     private int score;
+
     private bool isPlaying;
-    
-    //UI
-    public Slider RoundTimeIndicator;
-    public Button restartButton;
 
     private RecognitionBoard recognitionBoard;
+
+    //UI
+    [SerializeField]
+    private Slider RoundTimeIndicator;
+
+    [SerializeField]
+    private Button restartButton;
+
     private Image indicatorImage;
 
     void Awake()
@@ -25,19 +32,12 @@ public class GameManager : MonoBehaviour
         indicatorImage = RoundTimeIndicator.GetComponentInChildren<Image>();
     }
 
-    // Use this for initialization
     void Start ()
     {
         RestartGame();
     }
 
-    private void SetButtonVisibility(bool isVisible)
-    {
-        restartButton.gameObject.SetActive(isVisible);
-    }
-
-    // Update is called once per frame
-	void Update ()
+    void Update ()
 	{
 	    if (!isPlaying) return;
 
@@ -55,6 +55,11 @@ public class GameManager : MonoBehaviour
             SetButtonVisibility(true);
         }
 	}
+
+    private void SetButtonVisibility(bool isVisible)
+    {
+        restartButton.gameObject.SetActive(isVisible);
+    }
 
     void OnGestureRecognized()
     {
