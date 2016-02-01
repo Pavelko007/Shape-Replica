@@ -15,12 +15,14 @@ public class GameManager : MonoBehaviour
     public Button restartButton;
 
     private RecognitionBoard recognitionBoard;
+    private Image indicatorImage;
 
     void Awake()
     {
         SetButtonVisibility(false);
         recognitionBoard = GetComponent<RecognitionBoard>();
         RecognitionBoard.GestureRecognized += OnGestureRecognized;
+        indicatorImage = RoundTimeIndicator.GetComponentInChildren<Image>();
     }
 
     // Use this for initialization
@@ -41,12 +43,17 @@ public class GameManager : MonoBehaviour
 
 	    curRoundTimeLeft -= Time.deltaTime;
 	    RoundTimeIndicator.value = curRoundTimeLeft;
-	    if (curRoundTimeLeft < 0)
-	    {
-	        Debug.Log(string.Format("Time elapsed, your score is {0} points", score));
-	        isPlaying = false;
-	        SetButtonVisibility(true);
-	    }
+
+        float timeLeftNorm = curRoundTimeLeft / curRoundLenth;
+        if (timeLeftNorm > 2 / 3f) indicatorImage.color = Color.blue;
+        else if (timeLeftNorm > 1 / 3f) indicatorImage.color = Color.yellow;
+        else if (timeLeftNorm > 0) indicatorImage.color = Color.red;
+        else
+        {
+            Debug.Log(string.Format("Time elapsed, your score is {0} points", score));
+            isPlaying = false;
+            SetButtonVisibility(true);
+        }
 	}
 
     void OnGestureRecognized()

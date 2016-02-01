@@ -486,6 +486,7 @@ MonoBehaviour:
   LineRenderPrefab: {fileID: 400000, guid: 971129baafd304455a111daa5207b8a1, type: 2}
   TrailRendererPrefab: {fileID: 404054, guid: 0e94b1b7fceac034a80702187189a7dc, type: 2}
   RecognitionThreshold: 0.8
+  boardRect: {fileID: 263644260}
 --- !u!4 &415255062
 Transform:
   m_ObjectHideFlags: 0
@@ -635,7 +636,7 @@ GameObject:
   - 224: {fileID: 1414454096}
   - 114: {fileID: 1414454097}
   m_Layer: 5
-  m_Name: Slider
+  m_Name: Time Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
