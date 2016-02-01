@@ -53,7 +53,6 @@ namespace RecognizeGesture
             DrawMessage();
         }
 
-
         public void OnRecognizeClick()
         {
             Gesture candidate = new Gesture(points.ToArray());
