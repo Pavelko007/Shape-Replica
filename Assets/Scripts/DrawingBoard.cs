@@ -17,15 +17,15 @@ namespace RecognizeGesture
         protected int strokeId = -1;
 
         protected Vector2 TouchPosition = Vector2.zero;
-        protected Rect drawArea;
 
         protected RuntimePlatform platform;
 
         public double RecognitionThreshold;
-
-        private TrailDrawer trailDrawer;
-        private LineDrawer lineDrawer;
+        
         private GestureDrawerBase gestureDrawer;
+
+        [SerializeField]
+        private RectTransform boardRect;
 
         protected virtual void Awake()
         {
@@ -43,33 +43,21 @@ namespace RecognizeGesture
         {
             UpdateTouchPos();
 
-            if (!drawArea.Contains(TouchPosition)) return;
+            bool isTouchPosOnBoard = RectTransformUtility.RectangleContainsScreenPoint(boardRect, TouchPosition, Camera.main);
+            if (!isTouchPosOnBoard) return;
 
             if (Input.GetMouseButtonDown(0)) AddNewStroke();
 
             if (Input.GetMouseButton(0)) AddGesturePoint();
         }
-
-        protected void OnGUI()
-        {
-            CalcDrawArea();
-            GUI.Box(drawArea, "Draw Area");
-        }
-
+        
         public void Init()
         {
             platform = Application.platform;
-            CalcDrawArea();
         }
 
         protected abstract bool ShouldCleanBoard();
-
-        protected void CalcDrawArea()
-        {
-            float drawingAreaWidthFraction = 2 / 3f;
-            drawArea = new Rect(0, 0, Screen.width * drawingAreaWidthFraction, Screen.height);
-        }
-
+        
         protected void AddGesturePoint()
         {
             var point = new Point(TouchPosition.x, -TouchPosition.y, strokeId);

@@ -49,7 +49,6 @@ namespace RecognizeGesture
 
         void OnGUI()
         {
-            base.OnGUI();
             DrawMessage();
         }
 
