@@ -20,5 +20,10 @@ namespace RecognizeGesture.GestureDrawer
             return (Instantiate(StrokePrefab, Input.mousePosition, Quaternion.identity) as Transform)
                 .GetComponent<T>();
         }
+
+        protected Vector3 ConvertPointPos(Vector2 touchPos)
+        {
+            return Camera.main.ScreenToWorldPoint(new Vector3(touchPos.x, touchPos.y, 10));
+        }
     }
 }

@@ -33,23 +33,28 @@ namespace RecognizeGesture
                 : AddDrawer<LineDrawer>(LineRenderPrefab);
         }
 
+        public void Update()
+        {
+            UpdateTouchPos();
+
+            if (!Input.GetMouseButton(0) || !IsTouchPosOnBoard()) return;
+
+            if (Input.GetMouseButtonDown(0)) AddNewStroke();
+
+            AddGesturePoint();
+        }
+
+        public bool IsTouchPosOnBoard()
+        {
+            bool isTouchPosOnBoard = RectTransformUtility.RectangleContainsScreenPoint(boardRect, TouchPosition, Camera.main);
+            return isTouchPosOnBoard;
+        }
+
         private GestureDrawerBase AddDrawer<T>(Transform strokePrefab) where T : GestureDrawerBase
         {
             return (gameObject.AddComponent(typeof(T)) as T).WithPrefab(strokePrefab);
         }
 
-        void Update()
-        {
-            UpdateTouchPos();
-
-            bool isTouchPosOnBoard = RectTransformUtility.RectangleContainsScreenPoint(boardRect, TouchPosition, Camera.main);
-            if (!isTouchPosOnBoard) return;
-
-            if (Input.GetMouseButtonDown(0)) AddNewStroke();
-
-            if (Input.GetMouseButton(0)) AddGesturePoint();
-        }
-        
         public void Init()
         {
             platform = Application.platform;

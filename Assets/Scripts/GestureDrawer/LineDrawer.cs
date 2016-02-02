@@ -5,36 +5,31 @@ namespace RecognizeGesture.GestureDrawer
 {
     class LineDrawer : GestureDrawerBase
     {
-        private List<LineRenderer> lineRenderers = new List<LineRenderer>();
-        private LineRenderer curLineRenderer;
+        private LineRenderer lineRenderer;
 
-        private List<Vector3> curLineRendererPoints = new List<Vector3>();
+        private List<Vector3> lineRendererPoints = new List<Vector3>();
 
         public override void BeginNewStroke()
         {
-            curLineRendererPoints.Clear();
+            lineRendererPoints.Clear();
 
-            curLineRenderer = CreateNewLine<LineRenderer>();
-            lineRenderers.Add(curLineRenderer);
+            lineRenderer = CreateNewLine<LineRenderer>();
         }
 
         public override void AddPoint(Vector2 touchPos)
         {
-            Vector3 lineRendererPoint = Camera.main.ScreenToWorldPoint(new Vector3(touchPos.x, touchPos.y, 10));
-            curLineRendererPoints.Add(lineRendererPoint);
-            curLineRenderer.SetVertexCount(curLineRendererPoints.Count);
-            curLineRenderer.SetPositions(curLineRendererPoints.ToArray());
+            lineRendererPoints.Add(ConvertPointPos(touchPos));
+
+            lineRenderer.SetVertexCount(lineRendererPoints.Count);
+            lineRenderer.SetPositions(lineRendererPoints.ToArray());
         }
 
         public override void Clear()
         {
-            curLineRendererPoints.Clear();
-            foreach (LineRenderer lineRenderer in lineRenderers)
-            {
-                lineRenderer.SetVertexCount(0);
-                Destroy(lineRenderer.gameObject);
-            }
-            lineRenderers.Clear();
+            lineRendererPoints.Clear();
+
+            lineRenderer.SetVertexCount(0);
+            Destroy(lineRenderer.gameObject);
         }
     }
 }

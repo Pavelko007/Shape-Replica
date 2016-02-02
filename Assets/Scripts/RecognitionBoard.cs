@@ -32,7 +32,15 @@ namespace RecognizeGesture
             Init();
             LoadGestures();
         }
-        
+
+        void Update()
+        {
+            base.Update();
+            if (Input.GetMouseButtonUp(0) && IsTouchPosOnBoard())
+            {
+                OnRecognizeClick();
+            }
+        }
         public void NextGesture()
         {
             if (Gestures.Count <= 1) Debug.LogError("not enough gestures in library");
