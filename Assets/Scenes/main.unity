@@ -311,7 +311,7 @@ GameObject:
   - 222: {fileID: 199281302}
   - 114: {fileID: 199281301}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Sample Gesture Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -378,7 +378,7 @@ GameObject:
   - 222: {fileID: 263644262}
   - 114: {fileID: 263644261}
   m_Layer: 5
-  m_Name: Board Image
+  m_Name: Drawing Board
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -580,6 +580,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gestureOnScreenPrefab: {fileID: 400000, guid: 971129baafd304455a111daa5207b8a1,
     type: 2}
+  PanelRect: {fileID: 199281300}
 --- !u!114 &415255064
 MonoBehaviour:
   m_ObjectHideFlags: 0

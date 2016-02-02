@@ -24,8 +24,7 @@ namespace RecognizeGesture
         
         private GestureDrawerBase gestureDrawer;
 
-        [SerializeField]
-        private RectTransform boardRect;
+        [SerializeField] private RectTransform boardRect;
 
         protected virtual void Awake()
         {

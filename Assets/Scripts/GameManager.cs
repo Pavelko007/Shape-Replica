@@ -16,11 +16,8 @@ public class GameManager : MonoBehaviour
     private RecognitionBoard recognitionBoard;
 
     //UI
-    [SerializeField]
-    private Slider RoundTimeIndicator;
-
-    [SerializeField]
-    private Button restartButton;
+    [SerializeField] private Slider RoundTimeIndicator;
+    [SerializeField] private Button restartButton;
 
     private Image indicatorImage;
 
@@ -38,11 +35,16 @@ public class GameManager : MonoBehaviour
     }
 
     void Update ()
-	{
-	    if (!isPlaying) return;
+    {
+        if (!isPlaying) return;
 
-	    curRoundTimeLeft -= Time.deltaTime;
-	    RoundTimeIndicator.value = curRoundTimeLeft;
+        UpdateTimeIndicator();
+    }
+
+    private void UpdateTimeIndicator()
+    {
+        curRoundTimeLeft -= Time.deltaTime;
+        RoundTimeIndicator.value = curRoundTimeLeft;
 
         float timeLeftNorm = curRoundTimeLeft / curRoundLenth;
         if (timeLeftNorm > 2 / 3f) indicatorImage.color = Color.blue;
@@ -54,7 +56,7 @@ public class GameManager : MonoBehaviour
             isPlaying = false;
             SetButtonVisibility(true);
         }
-	}
+    }
 
     private void SetButtonVisibility(bool isVisible)
     {

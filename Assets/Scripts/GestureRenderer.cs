@@ -6,6 +6,7 @@ public class GestureRenderer : MonoBehaviour
 {
     public Transform gestureOnScreenPrefab;
     private LineRenderer currentGestureLineRenderer;
+    [SerializeField] private RectTransform PanelRect;
 
     public void RenderGesture(Gesture nextGesture)
     {
@@ -15,7 +16,7 @@ public class GestureRenderer : MonoBehaviour
             .GetComponent<LineRenderer>();
 
         var rendererPoints = nextGesture.Points
-            .Select(gesturePoint => new Vector3(gesturePoint.X, -gesturePoint.Y, 10))
+            .Select(gesturePoint => new Vector3(gesturePoint.X, -gesturePoint.Y, 0))
             .ToArray();
 
         currentGestureLineRenderer.SetVertexCount(rendererPoints.Length);
@@ -28,8 +29,11 @@ public class GestureRenderer : MonoBehaviour
     {
         currentGestureLineRenderer.useWorldSpace = false;
         Transform LRTransform = currentGestureLineRenderer.gameObject.transform;
-        LRTransform.localScale *= 3;
-        var screenPoint = new Vector2(Screen.width * 4 / 5f, Screen.height * 1 / 2f);
-        LRTransform.Translate(Camera.main.ScreenToWorldPoint(screenPoint));
+
+        var scale = LRTransform.localScale;
+        scale.x = scale.y = 3;
+        LRTransform.localScale = scale;
+
+        LRTransform.position = PanelRect.position + Vector3.back;
     }
 }
