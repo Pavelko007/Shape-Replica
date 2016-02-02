@@ -19,7 +19,7 @@ namespace RecognizeGesture.GestureDrawer
             if (curTrailRenderer != null)
             {
                 var mousePos = Camera.main.ScreenToWorldPoint(touchPosition);
-                mousePos.z = 10;
+                mousePos.z = Camera.main.transform.position.z + 1;
                 curTrailRenderer.transform.position = mousePos;
             }
         }
