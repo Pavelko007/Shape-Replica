@@ -28,6 +28,7 @@ namespace ShapeReplica.GestureDrawer
         {
             lineRendererPoints.Clear();
 
+            if (!lineRenderer) return;
             lineRenderer.SetVertexCount(0);
             Destroy(lineRenderer.gameObject);
         }
