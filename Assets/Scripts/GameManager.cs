@@ -18,12 +18,14 @@ namespace ShapeReplica
         //UI
         [SerializeField] private Slider RoundTimeIndicator;
         [SerializeField] private Button restartButton;
+        [SerializeField] private Text gameOverText;
+        [SerializeField] private Image gameOverPanel;
 
         private Image indicatorImage;
 
         void Awake()
         {
-            SetButtonVisibility(false);
+            ToggleGameOverPanel(false);
             recognitionBoard = GetComponent<RecognitionBoard>();
             RecognitionBoard.GestureRecognized += OnGestureRecognized;
             indicatorImage = RoundTimeIndicator.GetComponentInChildren<Image>();
@@ -50,17 +52,19 @@ namespace ShapeReplica
             if (timeLeftNorm > 2 / 3f) indicatorImage.color = Color.blue;
             else if (timeLeftNorm > 1 / 3f) indicatorImage.color = Color.yellow;
             else if (timeLeftNorm > 0) indicatorImage.color = Color.red;
-            else
-            {
-                Debug.Log(string.Format("Time elapsed, your score is {0} points", score));
-                isPlaying = false;
-                SetButtonVisibility(true);
-            }
+            else GameOver();
         }
 
-        private void SetButtonVisibility(bool isVisible)
+        private void GameOver()
         {
-            restartButton.gameObject.SetActive(isVisible);
+            gameOverText.text = string.Format("Time elapsed, you scored {0} points", score);
+            isPlaying = false;
+            ToggleGameOverPanel(true);
+        }
+
+        private void ToggleGameOverPanel(bool isVisible)
+        {
+            gameOverPanel.gameObject.SetActive(isVisible);
         }
 
         void OnGestureRecognized()
@@ -80,7 +84,7 @@ namespace ShapeReplica
 
         public void RestartGame()
         {
-            SetButtonVisibility(false);
+            ToggleGameOverPanel(false);
             isPlaying = true;
             score = 0;
             curRoundLenth = RoundLength;

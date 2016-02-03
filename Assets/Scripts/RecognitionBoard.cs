@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using PDollarGestureRecognizer;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace ShapeReplica
@@ -14,7 +15,7 @@ namespace ShapeReplica
         private GestureRenderer gestureRenderer;
         private Gesture curGesture;
         private RecognitionStatus recognitionStatus;
-        
+
         public static event Action GestureRecognized;
 
         enum RecognitionStatus
@@ -37,9 +38,10 @@ namespace ShapeReplica
             base.Update();
             if (Input.GetMouseButtonUp(0) && IsTouchPosOnBoard())
             {
-                OnRecognizeClick();
+                CompareShapes();
             }
         }
+
         public void NextGesture()
         {
             if (Gestures.Count <= 1) Debug.LogError("not enough gestures in library");
@@ -59,7 +61,13 @@ namespace ShapeReplica
             DrawMessage();
         }
 
-        public void OnRecognizeClick()
+        private void DrawMessage()
+        {
+            var messageRect = new Rect(10, Screen.height - 40, 500, 50);
+            GUI.Label(messageRect, message);
+        }
+
+        public void CompareShapes()
         {
             Gesture candidate = new Gesture(points.ToArray());
             Result gestureResult = PointCloudRecognizer.Classify(candidate, new[] { curGesture });
@@ -78,12 +86,6 @@ namespace ShapeReplica
                 message = gestureResult.GestureClass + " " + gestureResult.Score;
                 GestureRecognized();
             }
-        }
-
-        private void DrawMessage()
-        {
-            var messageRect = new Rect(10, Screen.height - 40, 500, 50);
-            GUI.Label(messageRect, message);
         }
 
         private void LoadGestures()
