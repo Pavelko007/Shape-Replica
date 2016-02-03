@@ -35,6 +35,8 @@ namespace ShapeReplica
 
         public void Update()
         {
+            if (!GameManager.IsPlaying) return;
+
             UpdateTouchPos();
 
             if (!Input.GetMouseButton(0) || !IsTouchPosOnBoard()) return;

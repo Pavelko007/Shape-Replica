@@ -11,7 +11,7 @@ namespace ShapeReplica
 
         private int score;
 
-        private bool isPlaying;
+        public static bool IsPlaying;
 
         private RecognitionBoard recognitionBoard;
 
@@ -38,7 +38,7 @@ namespace ShapeReplica
 
         void Update ()
         {
-            if (!isPlaying) return;
+            if (!IsPlaying) return;
 
             UpdateTimeIndicator();
         }
@@ -58,7 +58,7 @@ namespace ShapeReplica
         private void GameOver()
         {
             gameOverText.text = string.Format("Time elapsed, you scored {0} points", score);
-            isPlaying = false;
+            IsPlaying = false;
             ToggleGameOverPanel(true);
         }
 
@@ -76,8 +76,7 @@ namespace ShapeReplica
 
         private void ResetRound()
         {
-            RoundTimeIndicator.maxValue = curRoundLenth;
-            curRoundTimeLeft = curRoundLenth;
+            RoundTimeIndicator.maxValue = curRoundTimeLeft = curRoundLenth;
 
             curRoundLenth *= .85f;
         }
@@ -85,7 +84,7 @@ namespace ShapeReplica
         public void RestartGame()
         {
             ToggleGameOverPanel(false);
-            isPlaying = true;
+            IsPlaying = true;
             score = 0;
             curRoundLenth = RoundLength;
             ResetRound();
