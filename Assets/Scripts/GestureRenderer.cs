@@ -8,11 +8,12 @@ namespace ShapeReplica
     {
         public Transform gestureOnScreenPrefab;
         private LineRenderer currentGestureLineRenderer;
-        [SerializeField] private RectTransform PanelRect;
+        [SerializeField]
+        private RectTransform PanelRect;
 
         public void RenderGesture(Gesture nextGesture)
         {
-            if(currentGestureLineRenderer != null) Destroy(currentGestureLineRenderer.gameObject);
+            if (currentGestureLineRenderer != null) Destroy(currentGestureLineRenderer.gameObject);
 
             currentGestureLineRenderer = (Instantiate(gestureOnScreenPrefab, transform.position, transform.rotation) as Transform)
                 .GetComponent<LineRenderer>();
@@ -32,11 +33,26 @@ namespace ShapeReplica
             currentGestureLineRenderer.useWorldSpace = false;
             Transform LRTransform = currentGestureLineRenderer.gameObject.transform;
 
-            var scale = LRTransform.localScale;
-            scale.x = scale.y = 3;
+            //set scale
+            Vector3 scale = LRTransform.localScale;
+            scale.x = scale.y = CalcShapeScale();
             LRTransform.localScale = scale;
 
+            //set position
             LRTransform.position = PanelRect.position + Vector3.back;
+        }
+
+        private float CalcShapeScale()
+        {
+            float panelSize = (PanelRect.TransformPoint(Vector3.one * PanelRect.rect.xMax)
+                               - PanelRect.TransformPoint(Vector3.one * PanelRect.rect.xMin)).x;
+
+            float shapeSize = Mathf.Max(currentGestureLineRenderer.bounds.size.x,
+                currentGestureLineRenderer.bounds.size.y);
+
+            float fillCoef = .7f;
+            float scaleMult = fillCoef * panelSize / shapeSize;
+            return scaleMult;
         }
     }
 }
