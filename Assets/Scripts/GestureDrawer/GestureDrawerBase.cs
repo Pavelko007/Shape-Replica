@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace RecognizeGesture.GestureDrawer
+namespace ShapeReplica.GestureDrawer
 {
     public abstract class GestureDrawerBase : MonoBehaviour
     {

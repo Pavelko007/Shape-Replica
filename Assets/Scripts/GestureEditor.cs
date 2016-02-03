@@ -2,7 +2,7 @@ using System;
 using PDollarGestureRecognizer;
 using UnityEngine;
 
-namespace RecognizeGesture
+namespace ShapeReplica
 {
     class GestureEditor : DrawingBoard
     {

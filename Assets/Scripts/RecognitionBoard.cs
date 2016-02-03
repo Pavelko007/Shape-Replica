@@ -1,12 +1,11 @@
 ﻿using System;
-using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
-
 using PDollarGestureRecognizer;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace RecognizeGesture
+namespace ShapeReplica
 {
     public class RecognitionBoard : DrawingBoard
     {

@@ -1,39 +1,42 @@
-﻿using UnityEngine;
-using System.Linq;
+﻿using System.Linq;
 using PDollarGestureRecognizer;
+using UnityEngine;
 
-public class GestureRenderer : MonoBehaviour
+namespace ShapeReplica
 {
-    public Transform gestureOnScreenPrefab;
-    private LineRenderer currentGestureLineRenderer;
-    [SerializeField] private RectTransform PanelRect;
-
-    public void RenderGesture(Gesture nextGesture)
+    public class GestureRenderer : MonoBehaviour
     {
-        if(currentGestureLineRenderer != null) Destroy(currentGestureLineRenderer.gameObject);
+        public Transform gestureOnScreenPrefab;
+        private LineRenderer currentGestureLineRenderer;
+        [SerializeField] private RectTransform PanelRect;
 
-        currentGestureLineRenderer = (Instantiate(gestureOnScreenPrefab, transform.position, transform.rotation) as Transform)
-            .GetComponent<LineRenderer>();
+        public void RenderGesture(Gesture nextGesture)
+        {
+            if(currentGestureLineRenderer != null) Destroy(currentGestureLineRenderer.gameObject);
 
-        var rendererPoints = nextGesture.Points
-            .Select(gesturePoint => new Vector3(gesturePoint.X, -gesturePoint.Y, 0))
-            .ToArray();
+            currentGestureLineRenderer = (Instantiate(gestureOnScreenPrefab, transform.position, transform.rotation) as Transform)
+                .GetComponent<LineRenderer>();
 
-        currentGestureLineRenderer.SetVertexCount(rendererPoints.Length);
-        currentGestureLineRenderer.SetPositions(rendererPoints);
+            var rendererPoints = nextGesture.Points
+                .Select(gesturePoint => new Vector3(gesturePoint.X, -gesturePoint.Y, 0))
+                .ToArray();
 
-        TransformGesture();
-    }
+            currentGestureLineRenderer.SetVertexCount(rendererPoints.Length);
+            currentGestureLineRenderer.SetPositions(rendererPoints);
 
-    private void TransformGesture()
-    {
-        currentGestureLineRenderer.useWorldSpace = false;
-        Transform LRTransform = currentGestureLineRenderer.gameObject.transform;
+            TransformGesture();
+        }
 
-        var scale = LRTransform.localScale;
-        scale.x = scale.y = 3;
-        LRTransform.localScale = scale;
+        private void TransformGesture()
+        {
+            currentGestureLineRenderer.useWorldSpace = false;
+            Transform LRTransform = currentGestureLineRenderer.gameObject.transform;
 
-        LRTransform.position = PanelRect.position + Vector3.back;
+            var scale = LRTransform.localScale;
+            scale.x = scale.y = 3;
+            LRTransform.localScale = scale;
+
+            LRTransform.position = PanelRect.position + Vector3.back;
+        }
     }
 }

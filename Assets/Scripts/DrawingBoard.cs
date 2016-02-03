@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using PDollarGestureRecognizer;
-using RecognizeGesture.GestureDrawer;
+using ShapeReplica.GestureDrawer;
 using UnityEngine;
 
-namespace RecognizeGesture
+namespace ShapeReplica
 {
     public abstract class DrawingBoard : MonoBehaviour
     {

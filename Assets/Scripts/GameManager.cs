@@ -1,90 +1,91 @@
-﻿using RecognizeGesture;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
+namespace ShapeReplica
 {
-    [SerializeField]
-    private float RoundLength = 10f;
-    private float curRoundLenth;
-    private float curRoundTimeLeft;
-
-    private int score;
-
-    private bool isPlaying;
-
-    private RecognitionBoard recognitionBoard;
-
-    //UI
-    [SerializeField] private Slider RoundTimeIndicator;
-    [SerializeField] private Button restartButton;
-
-    private Image indicatorImage;
-
-    void Awake()
+    public class GameManager : MonoBehaviour
     {
-        SetButtonVisibility(false);
-        recognitionBoard = GetComponent<RecognitionBoard>();
-        RecognitionBoard.GestureRecognized += OnGestureRecognized;
-        indicatorImage = RoundTimeIndicator.GetComponentInChildren<Image>();
-    }
+        [SerializeField] private float RoundLength = 10f;
+        private float curRoundLenth;
+        private float curRoundTimeLeft;
 
-    void Start ()
-    {
-        RestartGame();
-    }
+        private int score;
 
-    void Update ()
-    {
-        if (!isPlaying) return;
+        private bool isPlaying;
 
-        UpdateTimeIndicator();
-    }
+        private RecognitionBoard recognitionBoard;
 
-    private void UpdateTimeIndicator()
-    {
-        curRoundTimeLeft -= Time.deltaTime;
-        RoundTimeIndicator.value = curRoundTimeLeft;
+        //UI
+        [SerializeField] private Slider RoundTimeIndicator;
+        [SerializeField] private Button restartButton;
 
-        float timeLeftNorm = curRoundTimeLeft / curRoundLenth;
-        if (timeLeftNorm > 2 / 3f) indicatorImage.color = Color.blue;
-        else if (timeLeftNorm > 1 / 3f) indicatorImage.color = Color.yellow;
-        else if (timeLeftNorm > 0) indicatorImage.color = Color.red;
-        else
+        private Image indicatorImage;
+
+        void Awake()
         {
-            Debug.Log(string.Format("Time elapsed, your score is {0} points", score));
-            isPlaying = false;
-            SetButtonVisibility(true);
+            SetButtonVisibility(false);
+            recognitionBoard = GetComponent<RecognitionBoard>();
+            RecognitionBoard.GestureRecognized += OnGestureRecognized;
+            indicatorImage = RoundTimeIndicator.GetComponentInChildren<Image>();
         }
-    }
 
-    private void SetButtonVisibility(bool isVisible)
-    {
-        restartButton.gameObject.SetActive(isVisible);
-    }
+        void Start ()
+        {
+            RestartGame();
+        }
 
-    void OnGestureRecognized()
-    {
-        score++;
-        ResetRound();
-        recognitionBoard.NextGesture();
-    }
+        void Update ()
+        {
+            if (!isPlaying) return;
 
-    private void ResetRound()
-    {
-        RoundTimeIndicator.maxValue = curRoundLenth;
-        curRoundTimeLeft = curRoundLenth;
+            UpdateTimeIndicator();
+        }
 
-        curRoundLenth *= .85f;
-    }
+        private void UpdateTimeIndicator()
+        {
+            curRoundTimeLeft -= Time.deltaTime;
+            RoundTimeIndicator.value = curRoundTimeLeft;
 
-    public void RestartGame()
-    {
-        SetButtonVisibility(false);
-        isPlaying = true;
-        score = 0;
-        curRoundLenth = RoundLength;
-        ResetRound();
-        recognitionBoard.NextGesture();
+            float timeLeftNorm = curRoundTimeLeft / curRoundLenth;
+            if (timeLeftNorm > 2 / 3f) indicatorImage.color = Color.blue;
+            else if (timeLeftNorm > 1 / 3f) indicatorImage.color = Color.yellow;
+            else if (timeLeftNorm > 0) indicatorImage.color = Color.red;
+            else
+            {
+                Debug.Log(string.Format("Time elapsed, your score is {0} points", score));
+                isPlaying = false;
+                SetButtonVisibility(true);
+            }
+        }
+
+        private void SetButtonVisibility(bool isVisible)
+        {
+            restartButton.gameObject.SetActive(isVisible);
+        }
+
+        void OnGestureRecognized()
+        {
+            score++;
+            ResetRound();
+            recognitionBoard.NextGesture();
+        }
+
+        private void ResetRound()
+        {
+            RoundTimeIndicator.maxValue = curRoundLenth;
+            curRoundTimeLeft = curRoundLenth;
+
+            curRoundLenth *= .85f;
+        }
+
+        public void RestartGame()
+        {
+            SetButtonVisibility(false);
+            isPlaying = true;
+            score = 0;
+            curRoundLenth = RoundLength;
+            ResetRound();
+            recognitionBoard.NextGesture();
+        }
     }
 }

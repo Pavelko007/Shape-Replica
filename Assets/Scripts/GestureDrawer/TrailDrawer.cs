@@ -1,7 +1,6 @@
 using UnityEngine;
-using Debug = System.Diagnostics.Debug;
 
-namespace RecognizeGesture.GestureDrawer
+namespace ShapeReplica.GestureDrawer
 {
     public class TrailDrawer : GestureDrawerBase
     {
