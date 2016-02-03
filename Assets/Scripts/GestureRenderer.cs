@@ -35,24 +35,29 @@ namespace ShapeReplica
 
             //set scale
             Vector3 scale = LRTransform.localScale;
-            scale.x = scale.y = CalcShapeScale();
+            scale.x = scale.y = GetShapeScale();
             LRTransform.localScale = scale;
 
             //set position
             LRTransform.position = PanelRect.position + Vector3.back;
         }
 
-        private float CalcShapeScale()
+        private float GetShapeScale()
         {
-            float panelSize = (PanelRect.TransformPoint(Vector3.one * PanelRect.rect.xMax)
-                               - PanelRect.TransformPoint(Vector3.one * PanelRect.rect.xMin)).x;
+            float fillCoef = .8f;
+            return fillCoef * GetPanelSize() / GetShapeSize();
+        }
 
-            float shapeSize = Mathf.Max(currentGestureLineRenderer.bounds.size.x,
-                currentGestureLineRenderer.bounds.size.y);
+        private float GetShapeSize()
+        {
+            return currentGestureLineRenderer.bounds.size.magnitude;
+        }
 
-            float fillCoef = .7f;
-            float scaleMult = fillCoef * panelSize / shapeSize;
-            return scaleMult;
+        private float GetPanelSize()
+        {
+            Vector3 maxPoint = PanelRect.TransformPoint(PanelRect.rect.max);
+            Vector3 minPoint = PanelRect.TransformPoint(PanelRect.rect.min);
+            return (maxPoint - minPoint).magnitude;
         }
     }
 }
