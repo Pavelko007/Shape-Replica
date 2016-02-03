@@ -52,7 +52,7 @@ namespace ShapeReplica
             ProcessAddNewGesture();
         }
 
-        protected override bool ShouldCleanBoard()
+        protected bool ShouldCleanBoard()
         {
             return gestureAdded;
         }

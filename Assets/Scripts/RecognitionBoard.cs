@@ -8,8 +8,10 @@ using Random = UnityEngine.Random;
 
 namespace ShapeReplica
 {
-    public class RecognitionBoard : DrawingBoard
+    public class RecognitionBoard : MonoBehaviour
     {
+        [SerializeField] private DrawingBoard drawingBoard;
+
         private string message;
         protected List<Gesture> Gestures = new List<Gesture>();
         private GestureRenderer gestureRenderer;
@@ -25,20 +27,18 @@ namespace ShapeReplica
             Fail
         }
 
-        protected override void Awake()
+        void Awake()
         {
-            base.Awake();
             gestureRenderer = GetComponent<GestureRenderer>();
-            Init();
             LoadGestures();
         }
 
         void Update()
         {
             if (!GameManager.IsPlaying) return;
-
-            base.Update();
-            if (Input.GetMouseButtonUp(0) && IsTouchPosOnBoard())
+            
+            if (Input.GetMouseButtonUp(0) &&
+                drawingBoard.IsTouchPosOnBoard())
             {
                 CompareShapes();
             }
@@ -55,7 +55,7 @@ namespace ShapeReplica
             curGesture = newGesture;
             recognitionStatus = RecognitionStatus.Await;
             gestureRenderer.RenderGesture(curGesture);
-            CleanDrawingArea();
+            drawingBoard.CleanDrawingArea();
         }
 
         void OnGUI()
@@ -69,9 +69,11 @@ namespace ShapeReplica
             GUI.Label(messageRect, message);
         }
 
+        [SerializeField] private double RecognitionThreshold = 0.7;
+
         public void CompareShapes()
         {
-            Gesture candidate = new Gesture(points.ToArray());
+            Gesture candidate = new Gesture(drawingBoard.points.ToArray());
             Result gestureResult = PointCloudRecognizer.Classify(candidate, new[] { curGesture });
 
             Debug.Log(string.Format("recognition score :{0}", gestureResult.Score));
@@ -80,7 +82,7 @@ namespace ShapeReplica
             {
                 recognitionStatus = RecognitionStatus.Fail;
                 message = "Gesture doesn't match. Try again";
-                CleanDrawingArea();
+                drawingBoard.CleanDrawingArea();
             }
             else
             {
@@ -112,12 +114,6 @@ namespace ShapeReplica
             {
                 Gestures.Add(GestureIO.ReadGestureFromXML(gestureXml.text));
             }
-        }
-
-        protected override bool ShouldCleanBoard()
-        {
-            return RecognitionStatus.Recognized == recognitionStatus ||
-                RecognitionStatus.Fail == recognitionStatus;
         }
     }
 }

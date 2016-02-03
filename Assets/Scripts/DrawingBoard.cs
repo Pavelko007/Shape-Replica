@@ -5,14 +5,14 @@ using UnityEngine;
 
 namespace ShapeReplica
 {
-    public abstract class DrawingBoard : MonoBehaviour
+    public class DrawingBoard : MonoBehaviour
     {
         public bool IsLinesDisappear = false;
 
         public Transform LineRenderPrefab;
         public Transform TrailRendererPrefab;
 
-        protected List<Point> points = new List<Point>();
+        public List<Point> points = new List<Point>();
 
         protected int strokeId = -1;
 
@@ -20,17 +20,13 @@ namespace ShapeReplica
 
         protected RuntimePlatform platform;
 
-        public double RecognitionThreshold;
-        
         private GestureDrawerBase gestureDrawer;
 
-        [SerializeField] private RectTransform boardRect;
+        private RectTransform boardRect;
 
         protected virtual void Awake()
         {
-            gestureDrawer = IsLinesDisappear
-                ? AddDrawer<TrailDrawer>(TrailRendererPrefab)
-                : AddDrawer<LineDrawer>(LineRenderPrefab);
+            Init();
         }
 
         public void Update()
@@ -59,10 +55,14 @@ namespace ShapeReplica
 
         public void Init()
         {
+            boardRect = GetComponent<RectTransform>();
             platform = Application.platform;
-        }
 
-        protected abstract bool ShouldCleanBoard();
+            gestureDrawer = IsLinesDisappear
+               ? AddDrawer<TrailDrawer>(TrailRendererPrefab)
+               : AddDrawer<LineDrawer>(LineRenderPrefab);
+        }
+        
         
         protected void AddGesturePoint()
         {
@@ -78,7 +78,7 @@ namespace ShapeReplica
             gestureDrawer.BeginNewStroke();
         }
 
-        protected void CleanDrawingArea()
+        public void CleanDrawingArea()
         {
             strokeId = -1;
 
