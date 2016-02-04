@@ -11,8 +11,9 @@ namespace ShapeReplica
     public class RecognitionBoard : MonoBehaviour
     {
         [SerializeField] private DrawingBoard drawingBoard;
+        [SerializeField] private double RecognitionThreshold = 0.7;
+        [SerializeField] private Text statusText;
 
-        private string message;
         protected List<Gesture> Gestures = new List<Gesture>();
         private GestureRenderer gestureRenderer;
         private Gesture curGesture;
@@ -31,6 +32,7 @@ namespace ShapeReplica
         {
             gestureRenderer = GetComponent<GestureRenderer>();
             LoadGestures();
+            statusText.text = "";
         }
 
         void Update()
@@ -58,19 +60,6 @@ namespace ShapeReplica
             drawingBoard.CleanDrawingArea();
         }
 
-        void OnGUI()
-        {
-            DrawMessage();
-        }
-
-        private void DrawMessage()
-        {
-            var messageRect = new Rect(10, Screen.height - 40, 500, 50);
-            GUI.Label(messageRect, message);
-        }
-
-        [SerializeField] private double RecognitionThreshold = 0.7;
-
         public void CompareShapes()
         {
             Gesture candidate = new Gesture(drawingBoard.points.ToArray());
@@ -78,18 +67,22 @@ namespace ShapeReplica
 
             Debug.Log(string.Format("recognition score :{0}", gestureResult.Score));
 
+
+            string statusString = "Shapes match on " + (int) (gestureResult.Score * 100) + " %." + Environment.NewLine;
+
             if (gestureResult.Score < RecognitionThreshold)
             {
                 recognitionStatus = RecognitionStatus.Fail;
-                message = "Gesture doesn't match. Try again";
+                statusString += "Threshold is " + (int)(RecognitionThreshold * 100) + " %. Try again";
                 drawingBoard.CleanDrawingArea();
             }
             else
             {
                 recognitionStatus = RecognitionStatus.Recognized;
-                message = gestureResult.GestureClass + " " + gestureResult.Score;
+                statusString += "You got it.";
                 GestureRecognized();
             }
+            statusText.text = statusString;
         }
 
         private void LoadGestures()
