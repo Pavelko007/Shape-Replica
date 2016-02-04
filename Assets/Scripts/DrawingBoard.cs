@@ -29,7 +29,12 @@ namespace ShapeReplica
 
         protected virtual void Awake()
         {
-            Init();
+            boardRect = GetComponent<RectTransform>();
+            platform = Application.platform;
+
+            gestureDrawer = IsLinesDisappear
+                ? AddDrawer<TrailDrawer>(TrailRendererPrefab)
+                : AddDrawer<LineDrawer>(LineRenderPrefab);
         }
 
         public void Update()

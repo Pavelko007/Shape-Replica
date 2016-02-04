@@ -4,16 +4,12 @@ using UnityEngine;
 
 namespace ShapeReplica
 {
-    class GestureEditor : DrawingBoard
+    class GestureEditor : MonoBehaviour
     {
+        [SerializeField] private DrawingBoard drawingBoard;
+
         private string newGestureName = "";
-        private bool gestureAdded = false;
-
-        void Start()
-        {
-            Init();
-        }
-
+        
         protected void ProcessAddNewGesture()
         {
             var gestureNameLabelRect = new Rect(Screen.width - 200, 150, 70, 30);
@@ -25,7 +21,7 @@ namespace ShapeReplica
             var addGestureRect = new Rect(Screen.width - 50, 150, 50, 30);
 
             if (GUI.Button(addGestureRect, "Add") &&
-                DrawingPoints.Count > 0 &&
+                drawingBoard.DrawingPoints.Count > 0 &&
                 newGestureName != "")
             {
                 AddNewGesture();
@@ -34,15 +30,13 @@ namespace ShapeReplica
 
         private void AddNewGesture()
         {
-            gestureAdded = true;
-
             string fileName = string.Format("{0}/{1}-{2}.xml",
                 Application.persistentDataPath,
                 newGestureName,
                 DateTime.Now.ToFileTime());
 
 #if !UNITY_WEBPLAYER
-            GestureIO.WriteGesture(DrawingPoints.ToArray(), newGestureName, fileName);
+            GestureIO.WriteGesture(drawingBoard.DrawingPoints.ToArray(), newGestureName, fileName);
 #endif
             newGestureName = "";
         }
@@ -52,9 +46,6 @@ namespace ShapeReplica
             ProcessAddNewGesture();
         }
 
-        protected bool ShouldCleanBoard()
-        {
-            return gestureAdded;
-        }
+      
     }
 }
