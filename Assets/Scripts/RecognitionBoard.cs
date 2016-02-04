@@ -38,35 +38,35 @@ namespace ShapeReplica
         void Update()
         {
             if (!GameManager.IsPlaying) return;
-            
-            if (Input.GetMouseButtonUp(0) &&
-                drawingBoard.IsDrawing)
-            {
-                CompareShapes();
-            }
+
+            if (!Input.GetMouseButtonUp(0) || !drawingBoard.IsDrawing) return;
+
+            CompareShapes();
         }
 
         public void NextGesture()
         {
             if (Gestures.Count <= 1) Debug.LogError("not enough gestures in library");
 
-            Gesture newGesture;
-            do newGesture = Gestures[Random.Range(0, Gestures.Count)];
-            while (curGesture == newGesture);
+            PickAnotherRandomGesture();
 
-            curGesture = newGesture;
             recognitionStatus = RecognitionStatus.Await;
             gestureRenderer.RenderGesture(curGesture);
             drawingBoard.CleanDrawingArea();
+        }
+
+        private void PickAnotherRandomGesture()
+        {
+            Gesture prevGesture = curGesture;
+
+            do curGesture = Gestures[Random.Range(0, Gestures.Count)];
+            while (curGesture == prevGesture);
         }
 
         public void CompareShapes()
         {
             Gesture candidate = new Gesture(drawingBoard.points.ToArray());
             Result gestureResult = PointCloudRecognizer.Classify(candidate, new[] { curGesture });
-
-            Debug.Log(string.Format("recognition score :{0}", gestureResult.Score));
-
 
             string statusString = "Shapes match on " + (int) (gestureResult.Score * 100) + " %." + Environment.NewLine;
 
@@ -88,7 +88,7 @@ namespace ShapeReplica
         private void LoadGestures()
         {
             LoadPreMadeGestures();
-            LoadUserCustomGestures();
+            //LoadUserCustomGestures();
         }
 
         private void LoadUserCustomGestures()
