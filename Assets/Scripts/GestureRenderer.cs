@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections;
+using System.Linq;
 using PDollarGestureRecognizer;
 using UnityEngine;
 
@@ -10,6 +12,7 @@ namespace ShapeReplica
         private LineRenderer currentGestureLineRenderer;
         [SerializeField]
         private RectTransform PanelRect;
+
 
         public void RenderGesture(Gesture nextGesture)
         {
@@ -25,11 +28,17 @@ namespace ShapeReplica
             currentGestureLineRenderer.SetVertexCount(rendererPoints.Length);
             currentGestureLineRenderer.SetPositions(rendererPoints);
 
-            TransformGesture();
+            StartCoroutine("TransformGesture");
         }
-
-        private void TransformGesture()
+       
+        private IEnumerator TransformGesture()
         {
+            // wait until Sample Panel has resized by vectical layout group
+            while (Math.Abs(GetPanelSize()) < float.Epsilon)
+            {
+                yield return new WaitForEndOfFrame();
+            }
+
             currentGestureLineRenderer.useWorldSpace = false;
             Transform LRTransform = currentGestureLineRenderer.gameObject.transform;
 
