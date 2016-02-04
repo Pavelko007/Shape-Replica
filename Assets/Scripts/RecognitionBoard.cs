@@ -10,7 +10,7 @@ namespace ShapeReplica
 {
     public class RecognitionBoard : MonoBehaviour
     {
-        [SerializeField] private DrawingBoard drawingBoard;
+        [SerializeField] public DrawingBoard drawingBoard;
         [SerializeField] private double RecognitionThreshold = 0.7;
         [SerializeField] private Text statusText;
 

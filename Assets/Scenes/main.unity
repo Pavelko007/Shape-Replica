@@ -699,7 +699,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gestureOnScreenPrefab: {fileID: 400000, guid: 98d713189db0dd24e9faa8956009bd56,
     type: 2}
-  PanelRect: {fileID: 199281300}
+  panelRect: {fileID: 199281300}
 --- !u!114 &415255064
 MonoBehaviour:
   m_ObjectHideFlags: 0

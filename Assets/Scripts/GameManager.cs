@@ -57,9 +57,11 @@ namespace ShapeReplica
 
         private void GameOver()
         {
-            gameOverText.text = string.Format("Time elapsed, you scored {0} points", score);
             IsPlaying = false;
-            ToggleGameOverPanel(true);
+
+            gameOverText.text = string.Format("Time elapsed, you scored {0} points", score);
+            recognitionBoard.drawingBoard.enabled = IsPlaying;
+            ToggleGameOverPanel(!IsPlaying);
         }
 
         private void ToggleGameOverPanel(bool isVisible)
@@ -83,8 +85,10 @@ namespace ShapeReplica
 
         public void RestartGame()
         {
-            ToggleGameOverPanel(false);
             IsPlaying = true;
+            recognitionBoard.drawingBoard.enabled = IsPlaying;
+            ToggleGameOverPanel(!IsPlaying);
+
             score = 0;
             curRoundLenth = RoundLength;
             ResetRound();
