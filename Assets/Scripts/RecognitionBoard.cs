@@ -14,12 +14,12 @@ namespace ShapeReplica
         [SerializeField] private double RecognitionThreshold = 0.7;
         [SerializeField] private Text statusText;
 
-        protected List<Gesture> Gestures = new List<Gesture>();
+        public static event Action GestureRecognized;
+
+        private List<Gesture> gestures = new List<Gesture>();
         private GestureRenderer gestureRenderer;
         private Gesture curGesture;
         private RecognitionStatus recognitionStatus;
-
-        public static event Action GestureRecognized;
 
         enum RecognitionStatus
         {
@@ -46,7 +46,7 @@ namespace ShapeReplica
 
         public void NextGesture()
         {
-            if (Gestures.Count <= 1) Debug.LogError("not enough gestures in library");
+            if (gestures.Count == 0) Debug.LogError("not enough gestures in library");
 
             PickAnotherRandomGesture();
 
@@ -59,13 +59,13 @@ namespace ShapeReplica
         {
             Gesture prevGesture = curGesture;
 
-            do curGesture = Gestures[Random.Range(0, Gestures.Count)];
+            do curGesture = gestures[Random.Range(0, gestures.Count)];
             while (curGesture == prevGesture);
         }
 
         public void CompareShapes()
         {
-            Gesture candidate = new Gesture(drawingBoard.points.ToArray());
+            Gesture candidate = new Gesture(drawingBoard.DrawingPoints.ToArray());
             Result gestureResult = PointCloudRecognizer.Classify(candidate, new[] { curGesture });
 
             string statusString = "Shapes match on " + (int) (gestureResult.Score * 100) + " %." + Environment.NewLine;
@@ -96,7 +96,7 @@ namespace ShapeReplica
             string[] filePaths = Directory.GetFiles(Application.persistentDataPath, "*.xml");
             foreach (string filePath in filePaths)
             {
-                Gestures.Add(GestureIO.ReadGestureFromFile(filePath));
+                gestures.Add(GestureIO.ReadGestureFromFile(filePath));
             }
         }
 
@@ -105,7 +105,7 @@ namespace ShapeReplica
             TextAsset[] gesturesXml = Resources.LoadAll<TextAsset>("Gestures/");
             foreach (TextAsset gestureXml in gesturesXml)
             {
-                Gestures.Add(GestureIO.ReadGestureFromXML(gestureXml.text));
+                gestures.Add(GestureIO.ReadGestureFromXML(gestureXml.text));
             }
         }
     }

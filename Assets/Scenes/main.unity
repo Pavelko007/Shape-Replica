@@ -712,7 +712,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RoundLength: 10
-  RoundTimeIndicator: {fileID: 1414454097}
+  roundTimeIndicator: {fileID: 1414454097}
   restartButton: {fileID: 178836905}
   gameOverText: {fileID: 1222240405}
   gameOverPanel: {fileID: 707847432}

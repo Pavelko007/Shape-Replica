@@ -12,11 +12,11 @@ namespace ShapeReplica
         public Transform LineRenderPrefab;
         public Transform TrailRendererPrefab;
 
-        public List<Point> points = new List<Point>();
+        public List<Point> DrawingPoints = new List<Point>();
 
         protected Vector2 TouchPosition = Vector2.zero;
 
-        protected RuntimePlatform platform;
+        private RuntimePlatform platform;
 
         private GestureDrawerBase gestureDrawer;
 
@@ -73,14 +73,14 @@ namespace ShapeReplica
         protected void AddGesturePoint()
         {
             var point = new Point(TouchPosition.x, -TouchPosition.y, 0);
-            points.Add(point);
+            DrawingPoints.Add(point);
 
             gestureDrawer.AddPoint(TouchPosition);
         }
 
         public void CleanDrawingArea()
         {
-            points.Clear();
+            DrawingPoints.Clear();
 
             gestureDrawer.Clear();
         }

@@ -6,7 +6,7 @@ namespace ShapeReplica
 {
     class GestureEditor : DrawingBoard
     {
-        protected string newGestureName = "";
+        private string newGestureName = "";
         private bool gestureAdded = false;
 
         void Start()
@@ -25,7 +25,7 @@ namespace ShapeReplica
             var addGestureRect = new Rect(Screen.width - 50, 150, 50, 30);
 
             if (GUI.Button(addGestureRect, "Add") &&
-                points.Count > 0 &&
+                DrawingPoints.Count > 0 &&
                 newGestureName != "")
             {
                 AddNewGesture();
@@ -42,7 +42,7 @@ namespace ShapeReplica
                 DateTime.Now.ToFileTime());
 
 #if !UNITY_WEBPLAYER
-            GestureIO.WriteGesture(points.ToArray(), newGestureName, fileName);
+            GestureIO.WriteGesture(DrawingPoints.ToArray(), newGestureName, fileName);
 #endif
             newGestureName = "";
         }

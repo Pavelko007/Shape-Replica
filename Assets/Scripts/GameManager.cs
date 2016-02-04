@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace ShapeReplica
@@ -9,26 +10,25 @@ namespace ShapeReplica
         private float curRoundLenth;
         private float curRoundTimeLeft;
 
-        private int score;
+        [SerializeField] Slider roundTimeIndicator;
+        private Image indicatorImage;
 
-        public static bool IsPlaying;
-
-        private RecognitionBoard recognitionBoard;
-
-        //UI
-        [SerializeField] private Slider RoundTimeIndicator;
         [SerializeField] private Button restartButton;
         [SerializeField] private Text gameOverText;
         [SerializeField] private Image gameOverPanel;
 
-        private Image indicatorImage;
+        public static bool IsPlaying;
+
+        private int score;
+
+        private RecognitionBoard recognitionBoard;
 
         void Awake()
         {
             ToggleGameOverPanel(false);
             recognitionBoard = GetComponent<RecognitionBoard>();
             RecognitionBoard.GestureRecognized += OnGestureRecognized;
-            indicatorImage = RoundTimeIndicator.GetComponentInChildren<Image>();
+            indicatorImage = roundTimeIndicator.GetComponentInChildren<Image>();
         }
 
         void Start ()
@@ -46,7 +46,7 @@ namespace ShapeReplica
         private void UpdateTimeIndicator()
         {
             curRoundTimeLeft -= Time.deltaTime;
-            RoundTimeIndicator.value = curRoundTimeLeft;
+            roundTimeIndicator.value = curRoundTimeLeft;
 
             float timeLeftNorm = curRoundTimeLeft / curRoundLenth;
             if (timeLeftNorm > 2 / 3f) indicatorImage.color = Color.blue;
@@ -76,7 +76,7 @@ namespace ShapeReplica
 
         private void ResetRound()
         {
-            RoundTimeIndicator.maxValue = curRoundTimeLeft = curRoundLenth;
+            roundTimeIndicator.maxValue = curRoundTimeLeft = curRoundLenth;
 
             curRoundLenth *= .85f;
         }

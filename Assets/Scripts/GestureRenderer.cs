@@ -8,20 +8,19 @@ namespace ShapeReplica
 {
     public class GestureRenderer : MonoBehaviour
     {
-        public Transform gestureOnScreenPrefab;
+        [SerializeField] private Transform gestureOnScreenPrefab;
+        [SerializeField] private RectTransform panelRect;
+
         private LineRenderer currentGestureLineRenderer;
-        [SerializeField]
-        private RectTransform PanelRect;
 
 
         public void RenderGesture(Gesture nextGesture)
         {
             if (currentGestureLineRenderer != null) Destroy(currentGestureLineRenderer.gameObject);
 
-            currentGestureLineRenderer = (Instantiate(gestureOnScreenPrefab, transform.position, transform.rotation) as Transform)
-                .GetComponent<LineRenderer>();
+            currentGestureLineRenderer = Instantiate(gestureOnScreenPrefab).GetComponent<LineRenderer>();
 
-            var rendererPoints = nextGesture.Points
+            Vector3[] rendererPoints = nextGesture.Points
                 .Select(gesturePoint => new Vector3(gesturePoint.X, -gesturePoint.Y, 0))
                 .ToArray();
 
@@ -40,15 +39,14 @@ namespace ShapeReplica
             }
 
             currentGestureLineRenderer.useWorldSpace = false;
-            Transform LRTransform = currentGestureLineRenderer.gameObject.transform;
 
-            //set scale
-            Vector3 scale = LRTransform.localScale;
+            Transform shapeTransform = currentGestureLineRenderer.transform;
+
+            Vector3 scale = shapeTransform.localScale;
             scale.x = scale.y = GetShapeScale();
-            LRTransform.localScale = scale;
+            shapeTransform.localScale = scale;
 
-            //set position
-            LRTransform.position = PanelRect.position + Vector3.back;
+            shapeTransform.position = panelRect.position + Vector3.back;
         }
 
         private float GetShapeScale()
@@ -65,8 +63,8 @@ namespace ShapeReplica
 
         private float GetPanelSize()
         {
-            Rect rect = PanelRect.rect;
-            return PanelRect.TransformVector(rect.max - rect.min).x;
+            Rect rect = panelRect.rect;
+            return panelRect.TransformVector(rect.max - rect.min).x;
         }
     }
 }
