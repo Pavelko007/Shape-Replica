@@ -88,7 +88,7 @@ namespace ShapeReplica
         private void LoadGestures()
         {
             LoadPreMadeGestures();
-            //LoadUserCustomGestures();
+            LoadUserCustomGestures();
         }
 
         private void LoadUserCustomGestures()
