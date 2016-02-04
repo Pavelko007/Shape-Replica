@@ -9,6 +9,11 @@ namespace ShapeReplica.GestureDrawer
 
         private List<Vector3> lineRendererPoints = new List<Vector3>();
 
+        public override bool IsDrawing
+        {
+            get { return lineRenderer != null; }
+        }
+
         public override void BeginNewStroke()
         {
             lineRendererPoints.Clear();

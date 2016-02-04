@@ -5,6 +5,9 @@ namespace ShapeReplica.GestureDrawer
     public abstract class GestureDrawerBase : MonoBehaviour
     {
         public Transform StrokePrefab;
+
+        public abstract bool IsDrawing { get; }
+
         public abstract void BeginNewStroke();
         public abstract void AddPoint(Vector2 touchPosition);
         public abstract void Clear();

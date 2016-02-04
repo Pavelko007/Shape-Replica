@@ -24,6 +24,11 @@ namespace ShapeReplica
 
         private RectTransform boardRect;
 
+        public bool IsDrawing
+        {
+            get { return gestureDrawer.IsDrawing; } 
+        }
+
         protected virtual void Awake()
         {
             Init();
@@ -39,7 +44,7 @@ namespace ShapeReplica
 
             if (Input.GetMouseButtonDown(0)) AddNewStroke();
 
-            AddGesturePoint();
+            if(gestureDrawer.IsDrawing) AddGesturePoint();
         }
 
         public bool IsTouchPosOnBoard()

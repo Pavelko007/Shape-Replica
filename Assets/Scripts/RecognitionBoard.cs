@@ -38,7 +38,7 @@ namespace ShapeReplica
             if (!GameManager.IsPlaying) return;
             
             if (Input.GetMouseButtonUp(0) &&
-                drawingBoard.IsTouchPosOnBoard())
+                drawingBoard.IsDrawing)
             {
                 CompareShapes();
             }

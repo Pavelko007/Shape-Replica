@@ -6,6 +6,11 @@ namespace ShapeReplica.GestureDrawer
     {
         private TrailRenderer trailRenderer;
 
+        public override bool IsDrawing
+        {
+            get { return trailRenderer != null; }
+        }
+
         public override void BeginNewStroke()
         {
             trailRenderer = CreateNewLine<TrailRenderer>();
