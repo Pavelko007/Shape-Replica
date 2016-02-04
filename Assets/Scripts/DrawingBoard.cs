@@ -14,8 +14,6 @@ namespace ShapeReplica
 
         public List<Point> points = new List<Point>();
 
-        protected int strokeId = -1;
-
         protected Vector2 TouchPosition = Vector2.zero;
 
         protected RuntimePlatform platform;
@@ -42,7 +40,10 @@ namespace ShapeReplica
 
             if (!Input.GetMouseButton(0) || !IsTouchPosOnBoard()) return;
 
-            if (Input.GetMouseButtonDown(0)) AddNewStroke();
+            if (Input.GetMouseButtonDown(0))
+            {
+                gestureDrawer.BeginNewStroke();
+            }
 
             if(gestureDrawer.IsDrawing) AddGesturePoint();
         }
@@ -71,22 +72,14 @@ namespace ShapeReplica
         
         protected void AddGesturePoint()
         {
-            var point = new Point(TouchPosition.x, -TouchPosition.y, strokeId);
+            var point = new Point(TouchPosition.x, -TouchPosition.y, 0);
             points.Add(point);
 
             gestureDrawer.AddPoint(TouchPosition);
         }
 
-        private void AddNewStroke()
-        {
-            ++strokeId;
-            gestureDrawer.BeginNewStroke();
-        }
-
         public void CleanDrawingArea()
         {
-            strokeId = -1;
-
             points.Clear();
 
             gestureDrawer.Clear();
