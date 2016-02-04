@@ -50,14 +50,14 @@ namespace ShapeReplica
 
         private float GetShapeSize()
         {
-            return currentGestureLineRenderer.bounds.size.magnitude;
+            Vector3 shapeSize = currentGestureLineRenderer.bounds.size;
+            return Mathf.Max(shapeSize.x, shapeSize.y);
         }
 
         private float GetPanelSize()
         {
-            Vector3 maxPoint = PanelRect.TransformPoint(PanelRect.rect.max);
-            Vector3 minPoint = PanelRect.TransformPoint(PanelRect.rect.min);
-            return (maxPoint - minPoint).magnitude;
+            Rect rect = PanelRect.rect;
+            return PanelRect.TransformVector(rect.max - rect.min).x;
         }
     }
 }
