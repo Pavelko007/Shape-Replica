@@ -6,8 +6,5 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Begin.unity
-  - enabled: 1
     path: Assets/Scenes/main.unity
-  - enabled: 0
-    path: Assets/Scenes/GestureEditor.unity
+    guid: 2f805ca487f2d7a479c6f95c79c51d02
