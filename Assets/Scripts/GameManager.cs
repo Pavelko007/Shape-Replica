@@ -25,10 +25,23 @@ namespace ShapeReplica
 
         void Awake()
         {
+            Pause();
             ToggleGameOverPanel(false);
             recognitionBoard = GetComponent<RecognitionBoard>();
             RecognitionBoard.GestureRecognized += OnGestureRecognized;
             indicatorImage = roundTimeIndicator.GetComponentInChildren<Image>();
+        }
+
+        private void Pause()
+        {
+            IsPlaying = false;
+            Time.timeScale = 0;
+        }
+
+        public void Resume()
+        {
+            IsPlaying = true;
+            Time.timeScale = 1;
         }
 
         void Start ()
