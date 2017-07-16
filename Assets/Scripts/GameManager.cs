@@ -94,5 +94,10 @@ namespace ShapeReplica
             ResetRound();
             recognitionBoard.NextGesture();
         }
+
+        public void Exit()
+        {
+            Application.Quit();
+        }
     }
 }
