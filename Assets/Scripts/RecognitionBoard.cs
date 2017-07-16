@@ -38,10 +38,6 @@ namespace ShapeReplica
         void Update()
         {
             if (!GameManager.IsPlaying) return;
-
-            if (!Input.GetMouseButtonUp(0) || !drawingBoard.IsDrawing) return;
-
-            CompareShapes();
         }
 
         public void NextGesture()
@@ -65,6 +61,8 @@ namespace ShapeReplica
 
         public void CompareShapes()
         {
+            if (!drawingBoard.IsDrawing) return;
+
             Gesture candidate = new Gesture(drawingBoard.DrawingPoints.ToArray());
             Result gestureResult = PointCloudRecognizer.Classify(candidate, new[] { curGesture });
 

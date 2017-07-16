@@ -491,6 +491,7 @@ GameObject:
   - component: {fileID: 263644262}
   - component: {fileID: 263644261}
   - component: {fileID: 263644263}
+  - component: {fileID: 263644264}
   m_Layer: 5
   m_Name: Drawing Board
   m_TagString: Untagged
@@ -563,6 +564,36 @@ MonoBehaviour:
   IsLinesDisappear: 1
   LineRenderPrefab: {fileID: 400000, guid: 98d713189db0dd24e9faa8956009bd56, type: 2}
   TrailRendererPrefab: {fileID: 404054, guid: 0e94b1b7fceac034a80702187189a7dc, type: 2}
+--- !u!114 &263644264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 263644259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 3
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 415255061}
+          m_MethodName: CompareShapes
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  delegates: []
 --- !u!1 &296539003
 GameObject:
   m_ObjectHideFlags: 0
