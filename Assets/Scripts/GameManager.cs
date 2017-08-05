@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -108,9 +110,9 @@ namespace ShapeReplica
             recognitionBoard.NextGesture();
         }
 
-        public void Exit()
+        public void OnShowMenuButtonClicked()
         {
-            Application.Quit();
+            EventManager.TriggerEvent(EventCollection.MenuButtonClicked);
         }
     }
 }
