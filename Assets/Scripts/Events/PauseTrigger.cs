@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace ShapeReplica
+namespace ShapeReplica.Events
 {
-    public class QuitTrigger : MonoBehaviour
+    public class PauseTrigger : MonoBehaviour
     {
         public void Awake()
         {
             GetComponent<Button>().onClick.AddListener(
-                () => EventManager.TriggerEvent(EventCollection.Quit));
+                () => EventManager.TriggerEvent(EventCollection.Pause));
         }
     }
 }
