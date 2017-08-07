@@ -1,12 +1,9 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace ShapeReplica
 {
-    public class GameManager : MonoBehaviour
+    public class GameManager : MonoBehaviour//todo make a singleton
     {
         [SerializeField] private float RoundLength = 10f;
         private float curRoundLenth;
@@ -27,7 +24,6 @@ namespace ShapeReplica
 
         void Awake()
         {
-            Pause();
             ToggleGameOverPanel(false);
             recognitionBoard = GetComponent<RecognitionBoard>();
             RecognitionBoard.GestureRecognized += OnGestureRecognized;
@@ -37,18 +33,13 @@ namespace ShapeReplica
         private void Pause()
         {
             IsPlaying = false;
-            Time.timeScale = 0;
+            Time.timeScale = 0;//todo
         }
 
         public void Resume()
         {
             IsPlaying = true;
-            Time.timeScale = 1;
-        }
-
-        void Start ()
-        {
-            RestartGame();
+            Time.timeScale = 1;//todo
         }
 
         void Update ()
@@ -98,7 +89,7 @@ namespace ShapeReplica
             curRoundLenth *= .85f;
         }
 
-        public void RestartGame()
+        public void StartGame()
         {
             IsPlaying = true;
             recognitionBoard.drawingBoard.enabled = IsPlaying;
