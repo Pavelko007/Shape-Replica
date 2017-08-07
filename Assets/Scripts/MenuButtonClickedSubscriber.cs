@@ -9,7 +9,7 @@ public class MenuButtonClickedSubscriber : MonoBehaviour
 	void Awake ()
 	{
 	    EventManager.StartListening(
-            EventCollection.MenuButtonClicked, 
+            EventCollection.OpenMenu, 
             ()=>showPanels.ShowMenu());
 	}
 }

@@ -103,7 +103,7 @@ namespace ShapeReplica
 
         public void OnShowMenuButtonClicked()
         {
-            EventManager.TriggerEvent(EventCollection.MenuButtonClicked);
+            EventManager.TriggerEvent(EventCollection.OpenMenu);
         }
     }
 }

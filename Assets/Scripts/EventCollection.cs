@@ -2,6 +2,7 @@ namespace ShapeReplica
 {
     public static class EventCollection
     {
-        public static string MenuButtonClicked = "MenuButtonClicked";
+        public const string OpenMenu = "menu button clicked";
+        public const string Quit = "quit";
     }
 }
