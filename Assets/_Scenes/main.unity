@@ -562,7 +562,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43f7706a3f3a7c74294a232fe53fefa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsLinesDisappear: 1
+  IsLinesDisappear: 0
   LineRenderPrefab: {fileID: 400000, guid: 98d713189db0dd24e9faa8956009bd56, type: 2}
   TrailRendererPrefab: {fileID: 404054, guid: 0e94b1b7fceac034a80702187189a7dc, type: 2}
 --- !u!114 &263644264
