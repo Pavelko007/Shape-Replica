@@ -86,7 +86,7 @@ namespace ShapeReplica
         private void LoadGestures()
         {
             LoadPreMadeGestures();
-            LoadUserCustomGestures();
+            //LoadUserCustomGestures();
         }
 
         private void LoadUserCustomGestures()
@@ -100,7 +100,8 @@ namespace ShapeReplica
 
         private void LoadPreMadeGestures()
         {
-            TextAsset[] gesturesXml = Resources.LoadAll<TextAsset>("Gestures/");
+
+            TextAsset[] gesturesXml = Resources.LoadAll<TextAsset>("Shapes/");
             foreach (TextAsset gestureXml in gesturesXml)
             {
                 gestures.Add(GestureIO.ReadGestureFromXML(gestureXml.text));

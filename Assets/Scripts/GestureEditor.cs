@@ -21,8 +21,8 @@ namespace ShapeReplica
         {
             if (drawingBoard.DrawingPoints.Count <= 0 || shapeTitle == "") return;
 
-            string fileName = string.Format("{0}/{1}-{2}.xml",
-                Application.persistentDataPath,
+            string fileName = string.Format("{0}/Resources/Shapes/{1}-{2}.xml",
+                Application.dataPath,
                 shapeTitle,
                 DateTime.Now.ToFileTime());
 
