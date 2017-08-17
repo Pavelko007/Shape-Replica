@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 5c0d493a32eaf1f4ab3d2f13792b4434
-timeCreated: 1502115009
+timeCreated: 1502993143
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
@@ -95,8 +95,8 @@ TextureImporter:
       name: pause-icon-solid_0
       rect:
         serializedVersion: 2
-        x: 225
-        y: 225
+        x: 3
+        y: 3
         width: 164
         height: 164
       alignment: 0
