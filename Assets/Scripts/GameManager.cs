@@ -5,22 +5,44 @@ namespace ShapeReplica
 {
     public class GameManager : MonoBehaviour//todo make a singleton
     {
-        [SerializeField] private float RoundLength = 10f;
-        private float curRoundLenth;
-        private float curRoundTimeLeft;
+        [SerializeField] private float previewDuration = 1;
+        private float previewRemainTime;
 
         [SerializeField] Slider roundTimeIndicator;
         private Image indicatorImage;
 
         [SerializeField] private Button restartButton;
         [SerializeField] private Text gameOverText;
+        [SerializeField] private Text RenaimingLivesText;
+
         [SerializeField] private Image gameOverPanel;
 
         public static bool IsPlaying;
 
-        private int score;
+        private int numCorrect;
+        private int remainingLives;
 
         private RecognitionBoard recognitionBoard;
+        private bool isShowPreview;
+        [SerializeField]
+        private int numLives = 3;
+
+        public int RemainingLives
+        {
+            get
+            {
+                return remainingLives;
+            }
+            set
+            {
+                if (value <= 0)
+                {
+                    GameOver();
+                }
+                remainingLives = value;
+                RenaimingLivesText.text = string.Format("you have {0} lives left", remainingLives);
+            }
+        }
 
         void Awake()
         {
@@ -45,27 +67,26 @@ namespace ShapeReplica
         void Update ()
         {
             if (!IsPlaying) return;
-
-            UpdateTimeIndicator();
+            if(isShowPreview) { UpdateTimeIndicator();}
         }
 
         private void UpdateTimeIndicator()
         {
-            curRoundTimeLeft -= Time.deltaTime;
-            roundTimeIndicator.value = curRoundTimeLeft;
+            previewRemainTime -= Time.deltaTime;
+            roundTimeIndicator.value = previewRemainTime;
 
-            float timeLeftNorm = curRoundTimeLeft / curRoundLenth;
-            if (timeLeftNorm > 2 / 3f) indicatorImage.color = Color.blue;
-            else if (timeLeftNorm > 1 / 3f) indicatorImage.color = Color.yellow;
-            else if (timeLeftNorm > 0) indicatorImage.color = Color.red;
-            else GameOver();
+            if (previewRemainTime < 0)
+            {
+                isShowPreview = false;
+                recognitionBoard.SetPreviewVisible(false);
+            }
         }
 
-        private void GameOver()
+        private void GameOver()//todo
         {
             IsPlaying = false;
 
-            gameOverText.text = string.Format("Time elapsed, you scored {0} points", score);
+            gameOverText.text = string.Format("You scored {0} points", numCorrect);
             recognitionBoard.drawingBoard.enabled = IsPlaying;
             ToggleGameOverPanel(!IsPlaying);
         }
@@ -75,30 +96,42 @@ namespace ShapeReplica
             gameOverPanel.gameObject.SetActive(isVisible);
         }
 
-        void OnGestureRecognized()
+        void OnGestureRecognized(bool isCorrect)
         {
-            score++;
-            ResetRound();
+            ResetTimer();
+            isShowPreview = true;
             recognitionBoard.NextGesture();
+            if (isCorrect)
+            {
+                numCorrect++;
+            }
+            else
+            {
+                RemainingLives--;
+            }
         }
 
-        private void ResetRound()
+        private void ResetTimer()
         {
-            roundTimeIndicator.maxValue = curRoundTimeLeft = curRoundLenth;
-
-            curRoundLenth *= .85f;
+            roundTimeIndicator.maxValue = previewRemainTime = previewDuration;
         }
 
         public void StartGame()
         {
+            RemainingLives = numLives;
             IsPlaying = true;
-            recognitionBoard.drawingBoard.enabled = IsPlaying;
-            ToggleGameOverPanel(!IsPlaying);
+            isShowPreview = true;
+            SetDrawingEnabled(true);
+            ToggleGameOverPanel(!IsPlaying);//todo
 
-            score = 0;
-            curRoundLenth = RoundLength;
-            ResetRound();
+            numCorrect = 0;
+            ResetTimer();
             recognitionBoard.NextGesture();
+        }
+
+        private void SetDrawingEnabled(bool enable)
+        {
+            recognitionBoard.drawingBoard.enabled = enable;
         }
 
         public void OnShowMenuButtonClicked()

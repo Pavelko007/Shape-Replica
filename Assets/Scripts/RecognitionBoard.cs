@@ -14,7 +14,7 @@ namespace ShapeReplica
         [SerializeField] private double RecognitionThreshold = 0.7;
         [SerializeField] private Text statusText;
 
-        public static event Action GestureRecognized;
+        public static event Action<bool> GestureRecognized;
 
         private List<Gesture> gestures = new List<Gesture>();
         private GestureRenderer gestureRenderer;
@@ -48,7 +48,13 @@ namespace ShapeReplica
 
             recognitionStatus = RecognitionStatus.Await;
             gestureRenderer.RenderGesture(curGesture);
+            SetPreviewVisible(true);
             drawingBoard.CleanDrawingArea();
+        }
+
+        public void SetPreviewVisible(bool isVisible)
+        {
+            gestureRenderer.currentGestureLineRenderer.enabled = isVisible;
         }
 
         private void PickAnotherRandomGesture()
@@ -66,19 +72,23 @@ namespace ShapeReplica
             Gesture candidate = new Gesture(drawingBoard.DrawingPoints.ToArray());
             Result gestureResult = PointCloudRecognizer.Classify(candidate, new[] { curGesture });
 
-            string statusString = "Shapes match on " + (int) (gestureResult.Score * 100) + " %." + Environment.NewLine;
+            string statusString;
+            //statusString = "Shapes match on " + (int)(gestureResult.Score * 100) + " %." + Environment.NewLine;
 
             if (gestureResult.Score < RecognitionThreshold)
             {
+                statusString = "incorrect";
                 recognitionStatus = RecognitionStatus.Fail;
-                statusString += "Threshold is " + (int)(RecognitionThreshold * 100) + " %. Try again";
+                //statusString += "Threshold is " + (int)(RecognitionThreshold * 100) + " %. Try again";
                 drawingBoard.CleanDrawingArea();
+                GestureRecognized(false);
             }
             else
             {
+                statusString = "correct";
                 recognitionStatus = RecognitionStatus.Recognized;
-                statusString += "You got it.";
-                GestureRecognized();
+                
+                GestureRecognized(true);
             }
             statusText.text = statusString;
         }

@@ -11,7 +11,7 @@ namespace ShapeReplica
         [SerializeField] private Transform gestureOnScreenPrefab;
         [SerializeField] private RectTransform panelRect;
 
-        private LineRenderer currentGestureLineRenderer;
+        public LineRenderer currentGestureLineRenderer;
 
 
         public void RenderGesture(Gesture nextGesture)
