@@ -15,7 +15,7 @@ namespace ShapeReplica
         [SerializeField] private Text gameOverText;
         [SerializeField] private Text RenaimingLivesText;
 
-        [SerializeField] private Image gameOverPanel;
+        [SerializeField] private GameObject gameOverPanel;
 
         public static bool IsPlaying;
 
@@ -46,7 +46,7 @@ namespace ShapeReplica
 
         void Awake()
         {
-            ToggleGameOverPanel(false);
+            gameOverPanel.SetActive(false);
             recognitionBoard = GetComponent<RecognitionBoard>();
             RecognitionBoard.GestureRecognized += OnGestureRecognized;
             indicatorImage = roundTimeIndicator.GetComponentInChildren<Image>();
@@ -88,12 +88,7 @@ namespace ShapeReplica
 
             gameOverText.text = string.Format("You scored {0} points", numCorrect);
             recognitionBoard.drawingBoard.enabled = IsPlaying;
-            ToggleGameOverPanel(!IsPlaying);
-        }
-
-        private void ToggleGameOverPanel(bool isVisible)
-        {
-            gameOverPanel.gameObject.SetActive(isVisible);
+            gameOverPanel.SetActive(true);
         }
 
         void OnGestureRecognized(bool isCorrect)
@@ -122,7 +117,7 @@ namespace ShapeReplica
             IsPlaying = true;
             isShowPreview = true;
             SetDrawingEnabled(true);
-            ToggleGameOverPanel(!IsPlaying);//todo
+            gameOverPanel.SetActive(false);
 
             numCorrect = 0;
             ResetTimer();
