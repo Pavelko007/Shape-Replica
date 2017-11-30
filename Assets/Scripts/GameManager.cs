@@ -52,15 +52,27 @@ namespace ShapeReplica
             indicatorImage = roundTimeIndicator.GetComponentInChildren<Image>();
         }
 
-        private void Pause()
+        public void OnGamePaused(bool isPaused)
+        {
+            if (isPaused)
+            {
+                Pause();
+            }
+            else Resume();
+        }
+
+        public void Pause()
         {
             IsPlaying = false;
+            recognitionBoard.drawingBoard.enabled = false;
             Time.timeScale = 0;//todo
         }
 
         public void Resume()
         {
             IsPlaying = true;
+            recognitionBoard.drawingBoard.enabled = true;
+
             Time.timeScale = 1;//todo
         }
 

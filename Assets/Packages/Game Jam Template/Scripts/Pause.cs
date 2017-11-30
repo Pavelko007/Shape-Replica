@@ -35,11 +35,12 @@ public class Pause : MonoBehaviour {
 	
 	}
 
-    public void TogglePause()
+    public void OnPause(bool isPaused)
     {
-        if(isPaused)UnPause();
-        else DoPause();
+        if (isPaused) DoPause();
+        else UnPause();
     }
+ 
 	public void DoPause()
 	{
 		//Set isPaused to true
