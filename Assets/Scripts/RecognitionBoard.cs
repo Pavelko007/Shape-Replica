@@ -17,6 +17,7 @@ namespace ShapeReplica
         public static event Action<bool> GestureRecognized;
 
         private List<Gesture> gestures = new List<Gesture>();
+        [SerializeField]
         private GestureRenderer gestureRenderer;
         private Gesture curGesture;
         private RecognitionStatus recognitionStatus;
@@ -30,7 +31,6 @@ namespace ShapeReplica
 
         void Awake()
         {
-            gestureRenderer = GetComponent<GestureRenderer>();
             LoadGestures();
             statusText.text = "";
         }
