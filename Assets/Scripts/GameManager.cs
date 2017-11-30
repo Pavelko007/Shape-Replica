@@ -128,10 +128,5 @@ namespace ShapeReplica
         {
             recognitionBoard.drawingBoard.enabled = enable;
         }
-
-        public void OnShowMenuButtonClicked()
-        {
-            EventManager.TriggerEvent(EventCollection.OpenMenu);
-        }
     }
 }
