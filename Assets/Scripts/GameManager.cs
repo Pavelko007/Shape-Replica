@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace ShapeReplica
@@ -7,8 +8,7 @@ namespace ShapeReplica
     {
         [SerializeField] private float previewDuration = 1;
         private float previewRemainTime;
-
-        [SerializeField] Slider roundTimeIndicator;
+        [SerializeField] Slider elapsedTimeSlider;
         private Image indicatorImage;
 
         [SerializeField] private Button restartButton;
@@ -26,6 +26,8 @@ namespace ShapeReplica
         private bool isShowPreview;
         [SerializeField]
         private int numLives = 3;
+
+        private float previewRemainTimeNorm;
 
         public int RemainingLives
         {
@@ -49,7 +51,6 @@ namespace ShapeReplica
             gameOverPanel.SetActive(false);
             recognitionBoard = GetComponent<RecognitionBoard>();
             RecognitionBoard.GestureRecognized += OnGestureRecognized;
-            indicatorImage = roundTimeIndicator.GetComponentInChildren<Image>();
         }
 
         public void OnGamePaused(bool isPaused)
@@ -85,7 +86,8 @@ namespace ShapeReplica
         private void UpdateTimeIndicator()
         {
             previewRemainTime -= Time.deltaTime;
-            roundTimeIndicator.value = previewRemainTime;
+            previewRemainTimeNorm = previewRemainTime / previewDuration;
+            elapsedTimeSlider.value = previewRemainTimeNorm;
 
             if (previewRemainTime < 0)
             {
@@ -120,7 +122,8 @@ namespace ShapeReplica
 
         private void ResetTimer()
         {
-            roundTimeIndicator.maxValue = previewRemainTime = previewDuration;
+            previewRemainTimeNorm = 1;
+            previewRemainTime = previewDuration;
         }
 
         public void StartGame()

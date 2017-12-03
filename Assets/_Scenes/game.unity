@@ -773,7 +773,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   previewDuration: 0.5
-  roundTimeIndicator: {fileID: 1414454097}
+  elapsedTimeSlider: {fileID: 1414454097}
   restartButton: {fileID: 178836905}
   gameOverText: {fileID: 1222240405}
   RenaimingLivesText: {fileID: 2058161178}
