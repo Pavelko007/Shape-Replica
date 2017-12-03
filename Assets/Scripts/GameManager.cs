@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using ShapeReplica.EventSystem;
+using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -27,7 +28,7 @@ namespace ShapeReplica
         [SerializeField]
         private int numLives = 3;
 
-        private float previewRemainTimeNorm;
+        private float previewRemainTimeNorm;//todo
 
         public int RemainingLives
         {
@@ -83,11 +84,13 @@ namespace ShapeReplica
             if(isShowPreview) { UpdateTimeIndicator();}
         }
 
+        [SerializeField] private GameEventFloat onShowCountdownTimeNorm;
+
         private void UpdateTimeIndicator()
         {
             previewRemainTime -= Time.deltaTime;
             previewRemainTimeNorm = previewRemainTime / previewDuration;
-            elapsedTimeSlider.value = previewRemainTimeNorm;
+            onShowCountdownTimeNorm.Raise(previewRemainTimeNorm);
 
             if (previewRemainTime < 0)
             {
