@@ -6,7 +6,7 @@ namespace ShapeReplica.EventSystem
     [CreateAssetMenu(fileName = "NewGameEvent.asset", menuName = "GameEvent", order = 1)]
     public class GameEvent : ScriptableObject
     {
-        private List<GameEventListener> listeners = new List<GameEventListener>();
+        private List<IEventListener> listeners = new List<IEventListener>();
 
         public void Raise()
         {
@@ -16,12 +16,12 @@ namespace ShapeReplica.EventSystem
             }
         }
 
-        public void RegisterListener(GameEventListener listener)
+        public void RegisterListener(IEventListener listener)
         {
             listeners.Add(listener);
         }
 
-        public void UnregisterListener(GameEventListener listener)
+        public void UnregisterListener(IEventListener listener)
         {
             listeners.Remove(listener);
         }

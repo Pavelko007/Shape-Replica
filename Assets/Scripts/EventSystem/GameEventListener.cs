@@ -3,17 +3,17 @@ using UnityEngine.Events;
 
 namespace ShapeReplica.EventSystem
 {
-    public class GameEventListener : MonoBehaviour
+    public class GameEventListener : MonoBehaviour, IEventListener
     {
         public GameEvent Event;
         public UnityEvent Response;//todo extend for arguments
 
-        private void OnEnable()
+        public void OnEnable()
         {
             Event.RegisterListener(this);
         }
 
-        private void OnDisable()
+        public void OnDisable()
         {
             Event.UnregisterListener(this);
         }

@@ -7,17 +7,17 @@ namespace ShapeReplica.EventSystem
     [Serializable]
     public class UnityEventFloat : UnityEvent<float> { }
 
-    public class GameEventListenerFloat : MonoBehaviour
+    public class GameEventListenerFloat : MonoBehaviour, IEventListener<float>
     {
         public GameEventFloat Event;
-        public UnityEventFloat Response; 
+        public UnityEventFloat Response;
 
-        private void OnEnable()
+        public void OnEnable()
         {
             Event.RegisterListener(this);
         }
 
-        private void OnDisable()
+        public void OnDisable()
         {
             Event.UnregisterListener(this);
         }

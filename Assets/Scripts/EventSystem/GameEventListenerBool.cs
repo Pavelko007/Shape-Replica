@@ -7,17 +7,17 @@ namespace ShapeReplica.EventSystem
     [Serializable]
     public class UnityEventBool : UnityEvent<bool> { }
 
-    public class GameEventListenerBool : MonoBehaviour
+    public class GameEventListenerBool : MonoBehaviour, IEventListener<bool>
     {
         public GameEventBool Event;
-        public UnityEventBool Response; 
+        public UnityEventBool Response;
 
-        private void OnEnable()
+        public void OnEnable()
         {
             Event.RegisterListener(this);
         }
 
-        private void OnDisable()
+        public void OnDisable()
         {
             Event.UnregisterListener(this);
         }
